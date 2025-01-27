@@ -7,29 +7,36 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-slate-400;
-  @apply text-slate-800;
+  @apply bg-t-color1 text-t-color4 font-serif;
+
+  /* in tailwind config instead */
+  --t-color0: #FBFBFB;
+  --t-color1: #c9c9c9;
+  --t-color2: #9E4770;
+  --t-color3: #631D76;
+  --t-color4: #423647;
+  --t-color5: #201A23;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  @apply text-t-color2 hover:text-t-color3 font-bold;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  @apply text-4xl underline underline-offset-4;
 }
 
-.react-flow {
-  @apply text-gray-800
+input {
+  @apply bg-t-color4 text-t-color1 px-2 ml-2 rounded-md;
+}
+
+.react-flow-custom {
+  /* React Flow style vars */
+  --xy-background-color: var(--t-color0);
+  --xy-edge-stroke-selected: var(--t-color2);
+  @apply text-t-color4;
 }
 
 .containerBox {
-  @apply bg-slate-200 p-2;
-  @apply rounded-md shadow-lg mx-2 mt-1;
+  @apply bg-t-color1 p-2 rounded-md shadow-lg mx-2 mt-1;
 }

@@ -1,4 +1,4 @@
-import { useNodesState, useEdgesState, OnConnect, addEdge, ReactFlow, Background, MiniMap, Controls } from "@xyflow/react";
+import { useNodesState, useEdgesState, OnConnect, addEdge, ReactFlow, Background } from "@xyflow/react";
 import { useCallback } from "react";
 
 import '@xyflow/react/dist/style.css';
@@ -17,6 +17,7 @@ export function Flow() {
   return (
     <div className="size-full">
       <ReactFlow
+        className="react-flow-custom"
         nodes={nodes}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
@@ -27,8 +28,6 @@ export function Flow() {
         fitView
       >
         <Background />
-        <MiniMap />
-        <Controls />
       </ReactFlow>
     </div>
   );
