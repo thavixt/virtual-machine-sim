@@ -10,7 +10,10 @@ export function Flow() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((edges) => addEdge(connection, edges)),
+    (conn) => setEdges((edges) => {
+      const connection = {...conn};
+      return addEdge(connection, edges)
+    }),
     [setEdges]
   );
 

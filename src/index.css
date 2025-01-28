@@ -30,6 +30,22 @@ input {
   @apply bg-t-color4 text-t-color1 px-2 ml-2 rounded-md;
 }
 
+button.start {
+  @apply bg-green-600
+}
+button.stop {
+  @apply bg-t-color2
+}
+button.reset {
+  @apply bg-t-color5
+}
+button {
+  @apply text-t-color1 bg-t-color4 hover:bg-t-color3 rounded-md px-2 h-8
+}
+button:disabled {
+  @apply opacity-30 cursor-not-allowed
+}
+
 .react-flow-custom {
   /* React Flow style vars */
   --xy-background-color: var(--t-color0);

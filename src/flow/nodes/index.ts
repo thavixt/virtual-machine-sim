@@ -1,33 +1,25 @@
-import type { Node, NodeTypes, BuiltInNode } from "@xyflow/react";
+import type { NodeTypes, BuiltInNode } from "@xyflow/react";
 import { PositionLoggerNode } from "./PositionLoggerNode";
+import { HaltNode } from "./HaltNode";
+import { InputStartNode } from "./InputStartNode";
+import { CalcNode } from "./CalcNode";
 
-export type PositionLoggerNode = Node<
-  {
-    label?: string;
-  },
-  "position-logger"
->;
-
-export type AppNode = BuiltInNode | PositionLoggerNode;
+export type AppNode = BuiltInNode
+  | PositionLoggerNode
+  | InputStartNode
+  | CalcNode
+  | HaltNode;
 
 export const initialNodes: AppNode[] = [
-  { id: "a", type: "input", position: { x: 0, y: 0 }, data: { label: "wire" } },
-  {
-    id: "b",
-    type: "position-logger",
-    position: { x: -100, y: 100 },
-    data: { label: "drag me!" },
-  },
-  { id: "c", position: { x: 100, y: 100 }, data: { label: "your ideas" } },
-  {
-    id: "d",
-    type: "output",
-    position: { x: 0, y: 200 },
-    data: { label: "with React Flow" },
-  },
+  { id: "a", type: 'inputStart', position: { x: 0, y: 0 }, data: {} },
+  { id: "b", type: 'calc', position: { x: 100, y: 100 }, data: {} },
+  { id: "c", type: 'halt', position: { x: 200, y: 0 }, data: {} },
 ];
 
 export const nodeTypes = {
   "position-logger": PositionLoggerNode,
+  "inputStart": InputStartNode,
+  "calc": CalcNode,
+  "halt": HaltNode,
   // Add any of your custom nodes here!
 } satisfies NodeTypes;
