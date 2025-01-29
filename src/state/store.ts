@@ -4,7 +4,7 @@ import { Edge } from '@xyflow/react';
 import { AppNode, DEFAULT_NODES } from '../flow/nodes';
 import { DEFAULT_EDGES } from '../flow/edges';
 import { ProcessType } from '../flow/nodes/TuringNode';
-import { Calculation, CALCULATIONS } from '../Calculations';
+import { Calculation, CALCULATIONS } from '../logic/calculations';
 import { ErrorMessage } from '../types';
 
 const DEFAULT_CALCULATION: Calculation = 'add';
@@ -37,13 +37,14 @@ interface TuringState {
 
   // turing machine
   calculation: Calculation;
-  current: ProcessType;
-  value: number;
+  currentProcess: ProcessType;
+  currentValue: number;
+  initialInputValue: number;
   calculate: () => Promise<Error | null>;
   clear: () => void;
   setCalculation: (calc: Calculation) => void;
-  setCurrent: (c: ProcessType) => void;
-  setValue: (v: number) => void;
+  setCurrentProcess: (c: ProcessType) => void;
+  setInitialInputValue: (input: number) => void;
   step: () => void;
 
   running: boolean;
@@ -55,55 +56,60 @@ export const useTuringStore = create<TuringState>()((set) => ({
   setRunning: (running) => set((state) => ({ ...state, running })),
   // turing machine
   calculation: DEFAULT_CALCULATION,
-  current: 'input',
-  value: DEFAULT_VALUE,
-  setValue: (value: number) => set((state) => ({ ...state, value })),
+  currentProcess: 'input',
+  initialInputValue: DEFAULT_VALUE,
+  currentValue: DEFAULT_VALUE,
+  setInitialInputValue: (input: number) => set((state) => ({ ...state, initialInputValue: input })),
   calculate: async () => {
     let error: Error | null = null;
     set((state) => {
-      if (state.current !== 'calc') {
+      if (state.currentProcess !== 'calc') {
         return { ...state };
       }
 
       if (state.position >= state.tape.length - 1) {
         error = new Error('Tape finished');
-        return { ...state, current: 'halt', running: false };
+        return { ...state, currentProcess: 'halt', running: false };
       }
 
       const nextPosition = state.position + 1;
-      const current = state.tape[nextPosition];
-      const prev = state.value;
+      const currentValue = state.currentValue;
+      const nextValue = state.tape[nextPosition];
 
       const nextState = {
         ...state,
         position: nextPosition,
       };
 
-      let log = `Calculating ${current} + ${prev}`;
-      let result = prev;
+      const fn = state.calculation;
+      const logPrefix = 'calculating:';
+      const logFn = `${fn}(${currentValue}, ${nextValue})`;
+      let log = ``;
+      let result = currentValue;
 
       try {
-        result = CALCULATIONS[state.calculation].fn(current, prev);
+        result = CALCULATIONS[state.calculation].fn(currentValue, nextValue);
+        console.log('result', result);
       } catch (e) {
         const calcError = e as Error;
         error = calcError;
         const errorMessage = JSON.parse(calcError.message) as ErrorMessage;
 
-        log = `Calculating ${current} + ${prev} = ${errorMessage.result}`;
+        log = `${logPrefix} ${logFn} -> ${errorMessage.result}`;
 
         return {
           ...nextState,
-          value: errorMessage.result,
-          current: 'halt',
+          currentValue: errorMessage.result,
+          currentProcess: 'halt',
           logs: [...state.logs, log, errorMessage.message],
           running: false,
         }
       }
 
-      log = `Calculating ${current} + ${prev} = ${result}`
+      log = `${logPrefix} ${logFn} -> ${result}`
       return {
         ...nextState,
-        value: result,
+        currentValue: result,
         logs: [...state.logs, log],
       };
     })
@@ -111,14 +117,14 @@ export const useTuringStore = create<TuringState>()((set) => ({
   },
   clear: () => set((state) => ({
     ...state,
-    current: 'input',
+    currentProcess: 'input',
     halted: false,
     logs: [],
     position: DEFAULT_POSITION,
-    value: DEFAULT_VALUE,
+    currentValue: state.initialInputValue,
   })),
   setCalculation: (calculation) => set((state) => ({ ...state, calculation })),
-  setCurrent: (c: ProcessType) => set((state) => ({ ...state, current: c })),
+  setCurrentProcess: (c: ProcessType) => set((state) => ({ ...state, currentProcess: c })),
 
   // react-flow
   edges: DEFAULT_EDGES,

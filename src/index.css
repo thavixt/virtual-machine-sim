@@ -18,6 +18,10 @@
   --t-color5: #201A23;
 }
 
+* {
+  @apply focus:outline-blue-400 focus:outline-8
+}
+
 a {
   @apply text-t-color2 hover:text-t-color3 font-bold;
 }
@@ -27,7 +31,11 @@ h1 {
 }
 
 input {
-  @apply bg-t-color4 text-t-color1 px-2 ml-2 rounded-md;
+  @apply bg-gray-600 text-t-color1 px-2 ml-2 rounded-md;
+}
+
+select {
+  @apply border border-slate-800 rounded-md
 }
 
 button.start {
@@ -54,6 +62,12 @@ button:disabled {
   @apply bg-t-color1 p-2 rounded-md shadow-lg mx-2 mt-1;
 }
 
+code {
+  @apply bg-slate-800 text-slate-200 px-1 rounded-md
+}
+
+/* React Flow styles */
+
 .react-flow-custom {
   /* React Flow style vars */
   --xy-background-color: var(--t-color0);
@@ -67,7 +81,7 @@ button:disabled {
 }
 
 .rf-node_active {
-  @apply !shadow-2xl !bg-slate-300
+  @apply !bg-slate-300
 }
 
 .rf-node_default {}

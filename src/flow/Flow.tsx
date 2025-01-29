@@ -10,11 +10,19 @@ export function Flow() {
     <div className="size-full">
       <ReactFlow
         className="react-flow-custom"
-        nodes={DEFAULT_NODES}
-        nodeTypes={nodeTypes}
-        edges={DEFAULT_EDGES}
-        edgeTypes={edgeTypes}
         fitView
+        edgeTypes={edgeTypes}
+        edges={DEFAULT_EDGES}
+        nodeTypes={nodeTypes}
+        nodes={DEFAULT_NODES}
+        // disable interactions
+        draggable={false}
+        edgesFocusable={false}
+        elementsSelectable={false}
+        nodesConnectable={false}
+        nodesDraggable={false}
+        nodesFocusable={false}
+        panOnDrag={false}
       >
         <Background />
       </ReactFlow>

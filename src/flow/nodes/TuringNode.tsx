@@ -2,7 +2,7 @@ import { Handle, Position, type NodeProps } from "@xyflow/react";
 import type { Node } from "@xyflow/react";
 import { useTuringStore } from "../../state/store";
 import { useMemo } from "react";
-import { CALCULATIONS } from "../../Calculations";
+import { CALCULATIONS } from "../../logic/calculations";
 
 export type ProcessType = 'input' | 'calc' | 'halt';
 
@@ -27,8 +27,7 @@ const DESCRIPTIONS = {
 export function TuringNode({ data: { type } }: NodeProps<TuringNode>) {
   const position = useTuringStore(state => state.position);
   const tape = useTuringStore(state => state.tape);
-  const value = useTuringStore(state => state.value);
-  const current = useTuringStore(state => state.current);
+  const current = useTuringStore(state => state.currentProcess);
   const calculation = useTuringStore(state => state.calculation);
   const status = current === type ? 'active' : 'default';
 
@@ -37,20 +36,25 @@ export function TuringNode({ data: { type } }: NodeProps<TuringNode>) {
       return CALCULATIONS[calculation].description;
     }
     return DESCRIPTIONS[type];
-  }, [])
+  }, [calculation, type])
 
   return (
     <div className={`react-flow__node-default rf-node rf-node_${type} rf-node_${status}`}>
       <p>{LABELS[type]}</p>
       <small>{description}</small>
-      <p><b>
-        {type === 'input' ? tape[position] ?? 0 : null}
-        {type === 'calc' ? (
-          <span>{value} + {tape[position] ?? 0}</span>
-        ) : null}
-      </b></p>
-      <Handle type={type === 'input' ? 'source' : 'target'} position={Position.Top} />
-      <Handle type={type === 'input' ? 'target' : 'source'} position={Position.Bottom} />
+      <p>
+        <b>{type === 'input' ? tape[position] ?? 0 : null}</b>
+      </p>
+      <Handle
+        type={type === 'input' ? 'source' : 'target'}
+        position={Position.Top}
+      />
+      {(type !== 'halt') ? (
+        <Handle
+          type={type === 'input' ? 'target' : 'source'}
+          position={Position.Bottom}
+        />
+      ) : null}
     </div>
   );
 }
