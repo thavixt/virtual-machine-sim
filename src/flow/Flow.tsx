@@ -1,33 +1,19 @@
-import { useNodesState, useEdgesState, OnConnect, addEdge, ReactFlow, Background } from "@xyflow/react";
-import { useCallback } from "react";
+import { ReactFlow, Background } from "@xyflow/react";
 
 import '@xyflow/react/dist/style.css';
 
-import { initialNodes, nodeTypes } from "./nodes";
-import { initialEdges, edgeTypes } from "./edges";
+import { DEFAULT_NODES, nodeTypes } from "./nodes";
+import { DEFAULT_EDGES, edgeTypes } from "./edges";
 
 export function Flow() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect: OnConnect = useCallback(
-    (conn) => setEdges((edges) => {
-      const connection = {...conn};
-      return addEdge(connection, edges)
-    }),
-    [setEdges]
-  );
-
   return (
     <div className="size-full">
       <ReactFlow
         className="react-flow-custom"
-        nodes={nodes}
+        nodes={DEFAULT_NODES}
         nodeTypes={nodeTypes}
-        onNodesChange={onNodesChange}
-        edges={edges}
+        edges={DEFAULT_EDGES}
         edgeTypes={edgeTypes}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
         fitView
       >
         <Background />

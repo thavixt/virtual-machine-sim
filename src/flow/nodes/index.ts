@@ -1,25 +1,31 @@
-import type { NodeTypes, BuiltInNode } from "@xyflow/react";
-import { PositionLoggerNode } from "./PositionLoggerNode";
-import { HaltNode } from "./HaltNode";
-import { InputStartNode } from "./InputStartNode";
-import { CalcNode } from "./CalcNode";
+import type { NodeTypes } from "@xyflow/react";
+import { TuringNode } from "./TuringNode";
+import type { TuringNode as TuringNodeType } from "./TuringNode";
 
-export type AppNode = BuiltInNode
-  | PositionLoggerNode
-  | InputStartNode
-  | CalcNode
-  | HaltNode;
+export type AppNode = TuringNodeType;
 
-export const initialNodes: AppNode[] = [
-  { id: "a", type: 'inputStart', position: { x: 0, y: 0 }, data: {} },
-  { id: "b", type: 'calc', position: { x: 100, y: 100 }, data: {} },
-  { id: "c", type: 'halt', position: { x: 200, y: 0 }, data: {} },
+export const DEFAULT_NODES: AppNode[] = [
+  {
+    id: 'input',
+    type: 'turingNode',
+    position: { x: 0, y: 0 },
+    data: { type: 'input' },
+  },
+  {
+    id: 'calc',
+    type: 'turingNode',
+    position: { x: 200, y: 0 },
+    data: { type: 'calc' },
+  },
+  {
+    id: 'halt',
+    type: 'turingNode',
+    position: { x: 100, y: 150 },
+    data: { type: 'halt' },
+  },
 ];
 
 export const nodeTypes = {
-  "position-logger": PositionLoggerNode,
-  "inputStart": InputStartNode,
-  "calc": CalcNode,
-  "halt": HaltNode,
-  // Add any of your custom nodes here!
+  "turingNode": TuringNode,
+  // add the custom nodes here
 } satisfies NodeTypes;

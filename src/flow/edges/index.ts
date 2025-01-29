@@ -1,11 +1,26 @@
 import type { Edge, EdgeTypes } from "@xyflow/react";
 
-export const initialEdges = [
-  // { id: "a->c", source: "a", target: "c", animated: true },
-  // { id: "b->d", source: "b", target: "d", animated: true },
-  // { id: "c->d", source: "c", target: "d", animated: true },
+export const DEFAULT_EDGES = [
+  {
+    id: "input->calc",
+    source: "input",
+    target: "calc",
+    animated: true,
+  },
+  {
+    id: "calc->input",
+    source: "calc",
+    target: "input",
+    animated: true,
+  },
+  {
+    id: "calc->halt",
+    source: "calc",
+    target: "halt",
+    animated: true,
+  },
 ] satisfies Edge[];
 
 export const edgeTypes = {
-  // Add your custom edge types here!
+  // add the custom edge types here
 } satisfies EdgeTypes;

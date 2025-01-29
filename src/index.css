@@ -33,17 +33,25 @@ input {
 button.start {
   @apply bg-green-600
 }
+
 button.stop {
   @apply bg-t-color2
 }
+
 button.reset {
   @apply bg-t-color5
 }
+
 button {
   @apply text-t-color1 bg-t-color4 hover:bg-t-color3 rounded-md px-2 h-8
 }
+
 button:disabled {
   @apply opacity-30 cursor-not-allowed
+}
+
+.containerBox {
+  @apply bg-t-color1 p-2 rounded-md shadow-lg mx-2 mt-1;
 }
 
 .react-flow-custom {
@@ -53,6 +61,21 @@ button:disabled {
   @apply text-t-color4;
 }
 
-.containerBox {
-  @apply bg-t-color1 p-2 rounded-md shadow-lg mx-2 mt-1;
+.rf-node {
+  background: #777;
+  color: white;
+}
+
+.rf-node_active {
+  @apply !shadow-2xl !bg-slate-300
+}
+
+.rf-node_default {}
+
+.rf-node_active.rf-node_input {}
+
+.rf-node_active.rf-node_calc {}
+
+.rf-node_active.rf-node_halt {
+  @apply !bg-t-color2 !text-gray-200
 }

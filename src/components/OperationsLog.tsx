@@ -6,10 +6,10 @@ export function OperationsLog() {
   return (
     <div className="containerBox flex flex-col min-h-0 h-full">
       Operations:
-      <div className="overflow-y-auto">
-        <div className="flex flex-col-reverse">
-          {logs.map((_, i) => (
-            <p key={i}>#{i}:</p>
+      <div className="overflow-y-auto h-full border border-t-color3 rounded-md p-2">
+        <div className="flex flex-col-reverse text-gray-500">
+          {logs.map((log, i) => (
+            <p key={i}><b>op#{i+1}:</b> <small>{log}</small></p>
           ))}
         </div>
       </div>

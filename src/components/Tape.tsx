@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useTuringStore } from "../state/store";
 import { useRef, useEffect } from "react";
 
-export type ITape = (0 | 1)[];
+export type ITape = (-1 | 0 | 1)[];
 
 
 export function Tape() {
@@ -23,7 +23,7 @@ export function Tape() {
 }
 
 export interface TapeValueProps {
-  value: 0 | 1;
+  value: ITape[number];
   current?: boolean;
 }
 
