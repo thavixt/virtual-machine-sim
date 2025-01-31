@@ -1,16 +1,15 @@
 import classNames from "classnames";
-import { useTuringStore } from "../state/store";
 import { useRef, useEffect } from "react";
+import { useTuringStore } from "../state";
 
-export type ITape = (-1 | 0 | 1)[];
-
+export type ITape = Array<number>;
 
 export function Tape() {
   const position = useTuringStore(state => state.position);
   const tape = useTuringStore(state => state.tape);
 
   return (
-    <div className="min-w-0 flex flex-col p-2 justify-center">
+    <div className="min-w-0 flex flex-col justify-center w-full">
       <div className="overflow-x-auto overflow-y-hidden">
         <div className="flex h-full space-x-1">
           {tape.map((v, i) => (
@@ -29,17 +28,17 @@ export interface TapeValueProps {
 
 export function TapeValue({ current, value }: TapeValueProps) {
   const ref = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollIntoView({behavior: 'smooth'});
+    if (ref.current && current) {
+      ref.current.scrollIntoView({ behavior: 'auto' });
     }
   }, [current]);
-  
+
   const classes = classNames({
     'border-t-color2 border-2': current,
     'border-t-color3': !current,
-  }, 'border-t-2 rounded-sm w-4 text-center')
+  }, 'border-t-4 rounded-sm w-fit text-center px-1')
   return (
     <div ref={ref} className={classes}>{value}</div>
   )

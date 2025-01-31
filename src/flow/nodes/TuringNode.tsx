@@ -1,8 +1,8 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import type { Node } from "@xyflow/react";
-import { useTuringStore } from "../../state/store";
 import { useMemo } from "react";
 import { CALCULATIONS } from "../../logic/calculations";
+import { useTuringStore } from "../../state";
 
 export type ProcessType = 'input' | 'calc' | 'halt';
 

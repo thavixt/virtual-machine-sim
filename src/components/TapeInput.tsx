@@ -1,37 +1,57 @@
-import { useTuringStore } from "../state/store";
-import { ITape } from "./Tape";
+import { useTuringStore } from "../state";
 
 export function TapeInput() {
-  const tape = useTuringStore(state => state.tape);
-  const setTape = useTuringStore(state => state.setTape);
   const input = useTuringStore(state => state.initialInputValue);
+  const running = useTuringStore(state => state.isRunning);
   const setInitialInputValue = useTuringStore(state => state.setInitialInputValue);
-  const running = useTuringStore(state => state.running);
+  const setStepMs = useTuringStore(state => state.setStepMs);
+  const setTapeString = useTuringStore(state => state.setTapeString);
+  const stepMs = useTuringStore(state => state.stepMs);
+  const tapeString = useTuringStore(state => state.tapeString);
 
-  const setTapeString = (input: string) => {
-    // only 1s and 0s allowed
-    const cleaned = input.replace(new RegExp('([^01])'), '');
-    const tapeValues = cleaned.split('').map(Number) as ITape;
-    setTape(tapeValues);
+  const setTape = (input: string) => {
+    // only 1s and 0s are allowed, separated by spaces
+    setTapeString(input);
   }
 
   return (
-    <div className="containerBox flex space-x-2">
-      <div className="flex space-x-2">
-        <label htmlFor="inputnum">Input number:</label>
+    <div className="containerBox grid grid-rows-1 grid-cols-12 gap-2">
+      <div className="flex space-x-2 col-span-2 items-center">
+        <label htmlFor="inputValue">Input:</label>
         <input
-          className="w-16"
+          className="w-full"
           disabled={running}
-          id="inputnum"
-          name="inputnum"
+          id="inputValue"
+          name="inputValue"
           onChange={(e) => setInitialInputValue(Math.max(0, +e.target.value))}
           type="number"
           value={input}
         />
       </div>
-      <div className="flex space-x-2 w-full" title="Input a tape of 1s and 0s, like: '0 1 0 0 1 1 1 0'">
-        <label htmlFor="input">Input tape:</label>
-        <input className="w-full" type="text" name="input" defaultValue={tape.join(', ')} onChange={e => setTapeString(e.target.value)} />
+      <div className="flex space-x-2 col-span-8 items-center" title="Input a list of numbers separated by spaces, like: '0 1123 0 -1 0 0 4 5'">
+        <label htmlFor="inputTape">Tape:</label>
+        <input
+          className="w-full"
+          disabled={running}
+          id="inputTape"
+          name="inputTape"
+          onChange={e => setTape(e.target.value)}
+          pattern="[0-9\s]+"
+          type="text"
+          value={tapeString}
+        />
+      </div>
+      <div className="flex space-x-2 col-span-2 items-center" title="Time it takes for the tape to advance (in ms, default 500 = half a second)">
+        <label htmlFor="inputSpeed">Speed:</label>
+        <input
+          className="w-full"
+          disabled={running}
+          id="inputSpeed"
+          name="inputSpeed"
+          onChange={e => setStepMs(+e.target.value)}
+          type="number"
+          value={stepMs}
+        />
       </div>
     </div>
   )

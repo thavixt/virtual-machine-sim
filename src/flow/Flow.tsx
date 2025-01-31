@@ -23,8 +23,9 @@ export function Flow() {
         nodesDraggable={false}
         nodesFocusable={false}
         panOnDrag={false}
+        zoomOnScroll={false}
       >
-        <Background />
+        <Background/>
       </ReactFlow>
     </div>
   );

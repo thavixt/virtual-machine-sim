@@ -7,15 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        't-color1': '#FBFBFB',
-        't-color1': '#FBFBFB',
-        't-color2': '#9E4770',
-        't-color3': '#631D76',
-        't-color4': '#423647',
-        't-color5': '#201A23',
+        't-color1': 'whitesmoke',
+        't-color2': '#C83E4D',
+        't-color3': '#F4B860',
+        't-color4': '#32373B',
+        't-color5': '#F4D6CC',
+        't-color5': '#4A5859',
       }
     },
   },
   plugins: [],
 }
 
+// current: https://coolors.co/32373b-4a5859-f4d6cc-f4b860-c83e4d

@@ -1,58 +1,65 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { StepCounter } from "./StepCounter";
 import { Tape } from "./Tape";
-import { STEP_MS, useTuringStore } from "../state/store";
+import { TuringAction, TurningState, useTuringStore } from "../state";
 import { sleep } from "../logic/utils";
 
 export function TuringMachine() {
-  const clear = useTuringStore(state => state.clear);
-  const setCurrent = useTuringStore(state => state.setCurrentProcess);
   const calculate = useTuringStore(state => state.calculate);
-  const running = useTuringStore(state => state.running);
-  const setRunning = useTuringStore(state => state.setRunning);
-  const [stopped, setStopped] = useState(false);
-
-  const stop = useCallback(() => {
-    // @todo fix to aaactually stop the tape/machine
-    setRunning(false);
-    setStopped(true);
-  }, [setRunning])
+  const reset = useTuringStore(state => state.reset);
+  const running = useTuringStore(state => state.isRunning);
+  const setCurrent = useTuringStore(state => state.setCurrentProcess);
+  const setRunning = useTuringStore(state => state.setIsRunning);
+  const step = useTuringStore(state => state.step);
+  const stepMs = useTuringStore(state => state.stepMs);
 
   const performCalculation = useCallback(async () => {
-    if (stopped) {
-      return;
-    }
     setRunning(true);
+
+    step();
     setCurrent('input');
-    await sleep(STEP_MS / 2);
+    await sleep(stepMs / 2);
 
     setCurrent('calc');
+    await sleep(stepMs / 2);
     const error = await calculate();
     if (error) {
       console.warn(error);
       return;
     }
     
-    await sleep(STEP_MS / 2);
-    // tail call
+    if (!TurningState.isRunning()) {
+      return;
+    }
     await performCalculation();
-  }, [calculate, setCurrent, setRunning, stopped]);
+  }, [calculate, setCurrent, setRunning, step, stepMs]);
 
   const start = useCallback(() => {
-    clear();
+    reset();
     performCalculation();
-  }, [clear, performCalculation])
+  }, [reset, performCalculation])
 
   return (
-    <div className="containerBox flex px-2 space-x-2">
-      <div className="flex space-x-2 items-center">
-        <button type="button" className="start" disabled={!!running} onClick={start}>Start</button>
-        <button type="button" className="stop" disabled={!running} onClick={stop}>Stop</button>
-        <button type="button" className="reset" disabled={!!running} onClick={clear}>Reset</button>
-      </div>
-      <Value/>
-      <StepCounter />
+    <div className="containerBox flex px-2 space-x-2 items-center">
+      <button
+        type="button"
+        className="start"
+        disabled={!!running}
+        onClick={start}
+      >
+        Start
+      </button>
+      <button
+        type="button"
+        className="stop"
+        disabled={!running}
+        onClick={TuringAction.stop}
+      >
+        Stop
+      </button>
       <Tape />
+      <Value />
+      <StepCounter />
     </div>
   )
 }
@@ -61,8 +68,8 @@ function Value() {
   const currentValue = useTuringStore(state => state.currentValue);
 
   return (
-    <div className="flex items-center self-center bg-gray-300 rounded-md px-2 h-8">
-      Current value: {currentValue}
+    <div className="bg-gray-300 rounded-md px-2 text-center text-sm">
+      Value: {currentValue}
     </div>
   )
 }

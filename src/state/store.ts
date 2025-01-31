@@ -1,21 +1,18 @@
 import { create } from 'zustand'
 import { ITape } from '../components/Tape';
-import { Edge } from '@xyflow/react';
-import { AppNode, DEFAULT_NODES } from '../flow/nodes';
-import { DEFAULT_EDGES } from '../flow/edges';
 import { ProcessType } from '../flow/nodes/TuringNode';
 import { Calculation, CALCULATIONS } from '../logic/calculations';
 import { ErrorMessage } from '../types';
 
-const DEFAULT_CALCULATION: Calculation = 'add';
+const DEFAULT_CALCULATION: Calculation = 'sumStep';
 const DEFAULT_LOGS: string[] = [];
 const DEFAULT_POSITION = -1;
-const DEFAULT_TAPE: ITape = [0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1];
+const DEFAULT_STEP_MS = 200;
+const DEFAULT_TAPE: ITape = Array(50).fill(0).map(() => [0,1,2,3,4,5,6,7,8,9,10]).flat();
 const DEFAULT_VALUE = 1;
 
 export const HALT_NODE = 'halt';
 export const START_NODE = 'inputStart';
-export const STEP_MS = 500;
 
 interface TuringState {
   // logging
@@ -23,73 +20,73 @@ interface TuringState {
   addLog: (log: string) => void;
 
   // react-flow
-  edges: Edge[];
-  nodes: AppNode[];
-  addEdge: (edge: Edge) => void;
-  addNode: (node: AppNode) => void;
+  // edges: Edge[];
+  // nodes: AppNode[];
+  // addEdge: (edge: Edge) => void;
+  // addNode: (node: AppNode) => void;
 
   // tape
-  halted: boolean;
   position: number;
   tape: ITape;
-  setHalted: (halted?: boolean) => void;
+  tapeString: string;
   setTape: (tape: ITape) => void;
+  setTapeString: (tape: string) => void;
 
   // turing machine
   calculation: Calculation;
   currentProcess: ProcessType;
   currentValue: number;
   initialInputValue: number;
+  stepMs: number;
   calculate: () => Promise<Error | null>;
-  clear: () => void;
+  reset: () => void;
   setCalculation: (calc: Calculation) => void;
   setCurrentProcess: (c: ProcessType) => void;
   setInitialInputValue: (input: number) => void;
+  setStepMs: (ms: number) => void;
   step: () => void;
 
-  running: boolean;
-  setRunning: (running: boolean) => void;
+  isRunning: boolean;
+  setIsRunning: (running: boolean) => void;
 }
 
 export const useTuringStore = create<TuringState>()((set) => ({
-  running: false,
-  setRunning: (running) => set((state) => ({ ...state, running })),
   // turing machine
+  stepMs: DEFAULT_STEP_MS,
+  isRunning: false,
+  setStepMs: (stepMs: number) => set(() => ({ stepMs })),
+  setIsRunning: (running) => set(() => ({ isRunning: running })),
+
   calculation: DEFAULT_CALCULATION,
-  currentProcess: 'input',
+  currentProcess: 'halt',
   initialInputValue: DEFAULT_VALUE,
   currentValue: DEFAULT_VALUE,
-  setInitialInputValue: (input: number) => set((state) => ({ ...state, initialInputValue: input })),
+  setInitialInputValue: (initialInputValue: number) => set(() => ({ initialInputValue })),
   calculate: async () => {
     let error: Error | null = null;
     set((state) => {
       if (state.currentProcess !== 'calc') {
-        return { ...state };
+        return {};
       }
 
-      if (state.position >= state.tape.length - 1) {
+      if (state.position >= state.tape.length) {
         error = new Error('Tape finished');
-        return { ...state, currentProcess: 'halt', running: false };
+        return { currentProcess: 'halt', isRunning: false };
       }
 
-      const nextPosition = state.position + 1;
+      const currentPosition = state.position;
       const currentValue = state.currentValue;
-      const nextValue = state.tape[nextPosition];
-
-      const nextState = {
-        ...state,
-        position: nextPosition,
-      };
+      const nextValue = state.tape[state.position];
 
       const fn = state.calculation;
-      const logPrefix = 'calculating:';
-      const logFn = `${fn}(${currentValue}, ${nextValue})`;
+      // @todo
+      const logPrefix = '';
+      const logFn = `${fn}(${currentPosition}, ${currentValue}, ${nextValue})`;
       let log = ``;
       let result = currentValue;
 
       try {
-        result = CALCULATIONS[state.calculation].fn(currentValue, nextValue);
-        console.log('result', result);
+        result = CALCULATIONS[state.calculation].fn(currentPosition, currentValue, nextValue);
       } catch (e) {
         const calcError = e as Error;
         error = calcError;
@@ -98,49 +95,56 @@ export const useTuringStore = create<TuringState>()((set) => ({
         log = `${logPrefix} ${logFn} -> ${errorMessage.result}`;
 
         return {
-          ...nextState,
           currentValue: errorMessage.result,
           currentProcess: 'halt',
           logs: [...state.logs, log, errorMessage.message],
-          running: false,
+          isRunning: false,
         }
       }
 
       log = `${logPrefix} ${logFn} -> ${result}`
       return {
-        ...nextState,
         currentValue: result,
         logs: [...state.logs, log],
       };
     })
     return error;
   },
-  clear: () => set((state) => ({
-    ...state,
-    currentProcess: 'input',
-    halted: false,
+  reset: () => set((state) => ({
+    // calculation: DEFAULT_CALCULATION,
+    currentProcess: 'halt',
+    currentValue: state.initialInputValue,
+    // initialInputValue: DEFAULT_VALUE,
     logs: [],
     position: DEFAULT_POSITION,
-    currentValue: state.initialInputValue,
+    // stepMs: DEFAULT_STEP_MS,
+    // tape: DEFAULT_TAPE,
   })),
-  setCalculation: (calculation) => set((state) => ({ ...state, calculation })),
-  setCurrentProcess: (c: ProcessType) => set((state) => ({ ...state, currentProcess: c })),
+  setCalculation: (calculation) => set(() => ({ calculation })),
+  setCurrentProcess: (c: ProcessType) => set(() => ({ currentProcess: c })),
 
   // react-flow
-  edges: DEFAULT_EDGES,
-  nodes: DEFAULT_NODES,
-  addEdge: (edge: Edge) => set((state) => ({ ...state, edges: [...state.edges, edge] })),
-  addNode: (node: AppNode) => set((state) => ({ ...state, nodes: [...state.nodes, node] })),
+  // edges: DEFAULT_EDGES,
+  // nodes: DEFAULT_NODES,
+  // addEdge: (edge: Edge) => set((state) => ({ ...state, edges: [...state.edges, edge] })),
+  // addNode: (node: AppNode) => set((state) => ({ ...state, nodes: [...state.nodes, node] })),
 
   // tape
   halted: false,
   position: DEFAULT_POSITION,
   tape: DEFAULT_TAPE,
-  setHalted: (halted = true) => set((state) => ({ ...state, halted })),
-  setTape: (tape) => set((state) => ({ ...state, tape })),
-  step: () => set((state) => ({ ...state, position: state.position + 1 })),
+  tapeString: DEFAULT_TAPE.join(' '),
+  setTape: (tape) => set(() => ({ tape })),
+  setTapeString: (tapeString: string) => set(() => {
+    const tape = tapeString.split(' ').map(Number) as ITape;
+    return {
+      tape,
+      tapeString
+    };
+  }),
+  step: () => set((state) => ({ position: state.position + 1 })),
 
   // logging
   logs: DEFAULT_LOGS,
-  addLog: (log: string) => set((state) => ({ ...state, logs: [...state.logs, log] })),
+  addLog: (log: string) => set((state) => ({ logs: [...state.logs, log] })),
 }))

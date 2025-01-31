@@ -7,19 +7,15 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-t-color1 text-t-color4 font-serif;
-
-  /* in tailwind config instead */
-  --t-color0: #FBFBFB;
-  --t-color1: #c9c9c9;
-  --t-color2: #9E4770;
-  --t-color3: #631D76;
-  --t-color4: #423647;
-  --t-color5: #201A23;
+  @apply bg-t-color5 text-t-color4 font-sans;
 }
 
 * {
   @apply focus:outline-blue-400 focus:outline-8
+}
+
+*:disabled {
+  @apply opacity-30 cursor-not-allowed
 }
 
 a {
@@ -27,51 +23,53 @@ a {
 }
 
 h1 {
-  @apply text-4xl underline underline-offset-4;
-}
-
-input {
-  @apply bg-gray-600 text-t-color1 px-2 ml-2 rounded-md;
-}
-
-select {
-  @apply border border-slate-800 rounded-md
-}
-
-button.start {
-  @apply bg-green-600
-}
-
-button.stop {
-  @apply bg-t-color2
-}
-
-button.reset {
-  @apply bg-t-color5
-}
-
-button {
-  @apply text-t-color1 bg-t-color4 hover:bg-t-color3 rounded-md px-2 h-8
-}
-
-button:disabled {
-  @apply opacity-30 cursor-not-allowed
-}
-
-.containerBox {
-  @apply bg-t-color1 p-2 rounded-md shadow-lg mx-2 mt-1;
+  @apply text-5xl font-serif;
 }
 
 code {
   @apply bg-slate-800 text-slate-200 px-1 rounded-md
 }
 
+/* box */
+
+.containerBox {
+  @apply bg-t-color1 rounded-md shadow-lg mx-2 mt-1 p-2;
+}
+
+/* buttons */
+
+button.start {
+  @apply bg-green-600
+}
+
+button.stop,
+button.reset {
+  @apply bg-t-color2
+}
+
+button.inverse {
+  @apply text-t-color5 hover:text-t-color1 bg-t-color1 border-t-color5 border
+}
+
+button {
+  @apply text-t-color1 bg-t-color4 hover:bg-t-color5 rounded-md px-2 h-8
+}
+
+/* inputs */
+
+input, textarea {
+  @apply bg-gray-600 text-t-color1 px-2 py-1 ml-2 rounded-md;
+}
+
+select {
+  @apply border border-slate-800 rounded-md
+}
+
 /* React Flow styles */
 
 .react-flow-custom {
   /* React Flow style vars */
-  --xy-background-color: var(--t-color0);
-  --xy-edge-stroke-selected: var(--t-color2);
+  --xy-background-color: whitesmoke;
   @apply text-t-color4;
 }
 
@@ -81,15 +79,17 @@ code {
 }
 
 .rf-node_active {
-  @apply !bg-slate-300
+  @apply !bg-t-color3;
 }
 
-.rf-node_default {}
+.rf-node_default {
+  @apply !text-t-color4
+}
 
 .rf-node_active.rf-node_input {}
 
 .rf-node_active.rf-node_calc {}
 
 .rf-node_active.rf-node_halt {
-  @apply !bg-t-color2 !text-gray-200
+  @apply !bg-t-color2 !text-t-color1
 }
