@@ -5,7 +5,7 @@ type EventHandler<T extends Record<string, unknown>> = ((params: T) => void | Pr
 type EventTrigger<T extends Record<string, unknown>> = (params: T) => void
 type EventPayload = Record<string, unknown>;
 
-const EVENT_TARGET_QUERY_SELECTOR = '#turingEventTarget';
+const EVENT_TARGET_QUERY_SELECTOR = '#virtualEventTarget';
 const LISTENERS: Record<EventName, EventListener> = {};
 
 /**
@@ -13,7 +13,7 @@ const LISTENERS: Record<EventName, EventListener> = {};
  * - Use the `useEvent` hook to fire the appropriate CustomEvent
  */
 export function useRegisterEvent<T extends EventPayload>(eventName: EventName, eventHandler: EventHandler<T>) {
-  const eventTarget = getTuringEventTarget();
+  const eventTarget = getVirtualEventTarget();
 
   useEffect(() => {
     // @ts-expect-error uhhh...
@@ -39,16 +39,16 @@ export function useRegisterEvent<T extends EventPayload>(eventName: EventName, e
 export function useEvent<T extends EventPayload>(eventName: EventName): EventTrigger<T> {
   return useCallback((params: T) => {
     const event = new CustomEvent(eventName, { detail: params });
-    getTuringEventTarget().dispatchEvent(event);
+    getVirtualEventTarget().dispatchEvent(event);
   }, [eventName]);
 }
 
 export function fireEvent<T extends EventPayload>(eventName: EventName, params: T) {
   const event = new CustomEvent(eventName, { detail: params });
-  getTuringEventTarget().dispatchEvent(event);
+  getVirtualEventTarget().dispatchEvent(event);
 }
 
-function getTuringEventTarget(): HTMLDivElement {
+function getVirtualEventTarget(): HTMLDivElement {
   return document.body.querySelector<HTMLDivElement>(EVENT_TARGET_QUERY_SELECTOR)!;
 }
 

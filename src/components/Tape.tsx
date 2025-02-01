@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import { useRef, useEffect } from "react";
-import { useTuringStore } from "../state";
+import { useVirtualStore } from "../state";
 import { ITape } from "../types";
 
 export function Tape() {
-  const position = useTuringStore(state => state.position);
-  const tape = useTuringStore(state => state.tape);
+  const position = useVirtualStore(state => state.position);
+  const tape = useVirtualStore(state => state.tape);
 
   return (
     <div className="min-w-0 flex flex-col justify-center w-full">

@@ -1,18 +1,18 @@
 import { create } from 'zustand'
 import { CALCULATIONS } from '../logic/calculations';
-import { Calculation, ErrorMessage, ITape, ProcessType } from '../types';
+import { Calculation, CalculationFn, ErrorMessage, ITape, ProcessType } from '../types';
 
-const DEFAULT_CALCULATION: Calculation = 'sumStep';
+const DEFAULT_CALCULATION: Calculation = 'even';
 const DEFAULT_LOGS: string[] = [];
 const DEFAULT_POSITION = -1;
 const DEFAULT_STEP_MS = 200;
-const DEFAULT_TAPE: ITape = Array(50).fill(0).map(() => [0,1,2,3,4,5,6,7,8,9,10]).flat();
+const DEFAULT_TAPE: ITape = Array(10).fill(0).map(() => [0, 0, 8, 1, 2, 3]).flat();
 const DEFAULT_VALUE = 1;
 
 export const HALT_NODE = 'halt';
 export const START_NODE = 'inputStart';
 
-interface TuringState {
+interface VirtualState {
   // logging
   logs: string[];
   addLog: (log: string) => void;
@@ -30,30 +30,47 @@ interface TuringState {
   setTape: (tape: ITape) => void;
   setTapeString: (tape: string) => void;
 
-  // turing machine
+  // virtual machine
   calculation: Calculation;
   currentProcess: ProcessType;
   currentValue: number;
   initialInputValue: number;
   stepMs: number;
+  addCalculation: (calc: CalculationFn) => void,
+  calculations: Record<Calculation, CalculationFn>,
   calculate: () => Promise<Error | null>;
   reset: () => void;
   setCalculation: (calc: Calculation) => void;
   setCurrentProcess: (c: ProcessType) => void;
   setInitialInputValue: (input: number) => void;
   setStepMs: (ms: number) => void;
-  step: () => void;
+  // 'api'
+  forward: (by?: number) => void;
+  back: (by?: number) => void;
 
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;
 }
 
-export const useTuringStore = create<TuringState>()((set) => ({
-  // turing machine
+export const useVirtualStore = create<VirtualState>()((set) => ({
+  // virtual machine
   stepMs: DEFAULT_STEP_MS,
   isRunning: false,
   setStepMs: (stepMs: number) => set(() => ({ stepMs })),
   setIsRunning: (running) => set(() => ({ isRunning: running })),
+
+  addCalculation: (calc: CalculationFn) => set((state) => {
+    const calculation = `fn${Math.round(Math.random() * 1e10)}`;
+    console.log('Adding calculation', calc);
+    return {
+      calculations: {
+        ...state.calculations,
+        [calculation]: calc,
+      },
+      calculation,
+    };
+  }),
+  calculations: CALCULATIONS,
 
   calculation: DEFAULT_CALCULATION,
   currentProcess: 'halt',
@@ -84,7 +101,7 @@ export const useTuringStore = create<TuringState>()((set) => ({
       let result = currentValue;
 
       try {
-        result = CALCULATIONS[state.calculation].fn(currentPosition, currentValue, nextValue);
+        result = executeCalculation(CALCULATIONS[state.calculation].fn, currentPosition, currentValue, nextValue);
       } catch (e) {
         const calcError = e as Error;
         error = calcError;
@@ -140,9 +157,29 @@ export const useTuringStore = create<TuringState>()((set) => ({
       tapeString
     };
   }),
-  step: () => set((state) => ({ position: state.position + 1 })),
+  forward: (by = 1) => set((state) => ({ position: Math.min(state.position + by, state.tape.length) })),
+  back: (by = 1) => set((state) => ({ position: Math.max(state.position - by, state.tape.length) })),
 
   // logging
   logs: DEFAULT_LOGS,
   addLog: (log: string) => set((state) => ({ logs: [...state.logs, log] })),
 }))
+
+/**
+ * Execute a calculation
+ * - it's either a function (predefined)
+ * - or a string (user-input, run with `eval`)
+ */
+function executeCalculation(
+  calculation: CalculationFn['fn'],
+  currentPosition: number,
+  currentValue: number,
+  nextValue: number,
+): number {
+  if (typeof calculation === 'string') {
+    const params = [currentPosition, currentValue, nextValue];
+    return eval(`(${calculation})(${params.join(',')})`)
+  }
+
+  return calculation(currentPosition, currentValue, nextValue)
+}

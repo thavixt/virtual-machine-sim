@@ -1,17 +1,17 @@
 import { useCallback } from "react";
 import { StepCounter } from "./StepCounter";
 import { Tape } from "./Tape";
-import { TuringAction, TurningState, useTuringStore } from "../state";
+import { VirtualAction, TurningState, useVirtualStore } from "../state";
 import { sleep } from "../logic/utils";
 
-export function TuringMachine() {
-  const calculate = useTuringStore(state => state.calculate);
-  const reset = useTuringStore(state => state.reset);
-  const running = useTuringStore(state => state.isRunning);
-  const setCurrent = useTuringStore(state => state.setCurrentProcess);
-  const setRunning = useTuringStore(state => state.setIsRunning);
-  const step = useTuringStore(state => state.step);
-  const stepMs = useTuringStore(state => state.stepMs);
+export function VirtualMachine() {
+  const calculate = useVirtualStore(state => state.calculate);
+  const reset = useVirtualStore(state => state.reset);
+  const running = useVirtualStore(state => state.isRunning);
+  const setCurrent = useVirtualStore(state => state.setCurrentProcess);
+  const setRunning = useVirtualStore(state => state.setIsRunning);
+  const step = useVirtualStore(state => state.forward);
+  const stepMs = useVirtualStore(state => state.stepMs);
 
   const performCalculation = useCallback(async () => {
     setRunning(true);
@@ -53,7 +53,7 @@ export function TuringMachine() {
         type="button"
         className="stop"
         disabled={!running}
-        onClick={TuringAction.stop}
+        onClick={VirtualAction.stop}
       >
         Stop
       </button>
@@ -65,7 +65,7 @@ export function TuringMachine() {
 }
 
 function Value() {
-  const currentValue = useTuringStore(state => state.currentValue);
+  const currentValue = useVirtualStore(state => state.currentValue);
 
   return (
     <div className="bg-gray-300 rounded-md px-2 text-center text-sm">

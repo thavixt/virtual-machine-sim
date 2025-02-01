@@ -1,14 +1,14 @@
 import { useCallback, useRef, useState } from "react";
 import { Dialog } from "./Dialog";
 import { DialogType, useDialogForms } from "../logic/useDialogForm";
-import { useTuringStore } from "../state";
+import { useVirtualStore } from "../state";
 
 export function DashboardButtons() {
   const [activeDialog, setActiveDialog] = useState<DialogType>('set');
   const dialogForms = useDialogForms();
 
-  const calculation = useTuringStore(state => state.calculation);
-  const running = useTuringStore(state => state.isRunning);
+  const calculation = useVirtualStore(state => state.calculation);
+  const running = useVirtualStore(state => state.isRunning);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const openDialog = useCallback((type: DialogType | null) => {

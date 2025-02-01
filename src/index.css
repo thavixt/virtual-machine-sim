@@ -1,6 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --color-t-color1: whitesmoke;
+  --color-t-color2: #c83e4d;
+  --color-t-color3: #f4b860;
+  --color-t-color4: #32373b;
+  --color-t-color5: #4a5859;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 :root {
   font-synthesis: none;
@@ -11,7 +35,7 @@
 }
 
 * {
-  @apply focus:outline-blue-400 focus:outline-8
+  @apply focus:outline-blue-400 focus:outline-2
 }
 
 *:disabled {
@@ -79,11 +103,11 @@ select {
 }
 
 .rf-node_active {
-  @apply !bg-t-color3;
+  @apply bg-t-color3!;
 }
 
 .rf-node_default {
-  @apply !text-t-color4
+  @apply text-t-color4!
 }
 
 .rf-node_active.rf-node_input {}
@@ -91,5 +115,5 @@ select {
 .rf-node_active.rf-node_calc {}
 
 .rf-node_active.rf-node_halt {
-  @apply !bg-t-color2 !text-t-color1
+  @apply bg-t-color2! text-t-color1!
 }

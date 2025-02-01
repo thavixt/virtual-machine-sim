@@ -1,31 +1,31 @@
 import type { NodeTypes } from "@xyflow/react";
-import { TuringNode } from "./TuringNode";
-import type { TuringNode as TuringNodeType } from "./TuringNode";
+import { VirtualNode } from "./VirtualNode";
+import type { VirtualNode as VirtualNodeType } from "./VirtualNode";
 
-export type AppNode = TuringNodeType;
+export type AppNode = VirtualNodeType;
 
 export const DEFAULT_NODES: AppNode[] = [
   {
     id: 'input',
-    type: 'turingNode',
+    type: 'virtualNode',
     position: { x: 0, y: 0 },
     data: { type: 'input' },
   },
   {
     id: 'calc',
-    type: 'turingNode',
+    type: 'virtualNode',
     position: { x: 200, y: 0 },
     data: { type: 'calc' },
   },
   {
     id: 'halt',
-    type: 'turingNode',
+    type: 'virtualNode',
     position: { x: 100, y: 150 },
     data: { type: 'halt' },
   },
 ];
 
 export const nodeTypes = {
-  "turingNode": TuringNode,
+  "virtualNode": VirtualNode,
   // add the custom nodes here
 } satisfies NodeTypes;

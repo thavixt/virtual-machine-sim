@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { useTuringStore } from "../state";
+import { useVirtualStore } from "../state";
 
 export function StepCounter() {
-  const currentProcess = useTuringStore(state => state.currentProcess);
-  const position = useTuringStore(state => state.position);
+  const currentProcess = useVirtualStore(state => state.currentProcess);
+  const position = useVirtualStore(state => state.position);
 
   const halted = (currentProcess === 'halt');
 

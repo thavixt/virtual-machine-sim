@@ -1,13 +1,13 @@
-import { useTuringStore } from "../state";
+import { useVirtualStore } from "../state";
 
 export function TapeInput() {
-  const input = useTuringStore(state => state.initialInputValue);
-  const running = useTuringStore(state => state.isRunning);
-  const setInitialInputValue = useTuringStore(state => state.setInitialInputValue);
-  const setStepMs = useTuringStore(state => state.setStepMs);
-  const setTapeString = useTuringStore(state => state.setTapeString);
-  const stepMs = useTuringStore(state => state.stepMs);
-  const tapeString = useTuringStore(state => state.tapeString);
+  const input = useVirtualStore(state => state.initialInputValue);
+  const running = useVirtualStore(state => state.isRunning);
+  const setInitialInputValue = useVirtualStore(state => state.setInitialInputValue);
+  const setStepMs = useVirtualStore(state => state.setStepMs);
+  const setTapeString = useVirtualStore(state => state.setTapeString);
+  const stepMs = useVirtualStore(state => state.stepMs);
+  const tapeString = useVirtualStore(state => state.tapeString);
 
   const setTape = (input: string) => {
     // only 1s and 0s are allowed, separated by spaces

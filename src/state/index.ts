@@ -1,8 +1,8 @@
-import { TuringAction, TurningState } from './actions';
-import { useTuringStore } from './store';
+import { VirtualAction, TurningState } from './actions';
+import { useVirtualStore } from './store';
 
 export {
-  TuringAction,
+  VirtualAction,
   TurningState,
-  useTuringStore,
+  useVirtualStore,
 }

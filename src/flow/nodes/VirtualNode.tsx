@@ -1,15 +1,14 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import type { Node } from "@xyflow/react";
-import { useMemo } from "react";
-import { CALCULATIONS } from "../../logic/calculations";
-import { useTuringStore } from "../../state";
+import { useEffect, useMemo } from "react";
+import { useVirtualStore } from "../../state";
 import { ProcessType } from "../../types";
 
-export type TuringNode = Node<
+export type VirtualNode = Node<
   {
     type: ProcessType
   },
-  "turingNode"
+  "virtualNode"
 >;
 
 const LABELS = {
@@ -23,19 +22,26 @@ const DESCRIPTIONS = {
   halt: 'Process exited, tape stopped',
 }
 
-export function TuringNode({ data: { type } }: NodeProps<TuringNode>) {
-  const position = useTuringStore(state => state.position);
-  const tape = useTuringStore(state => state.tape);
-  const current = useTuringStore(state => state.currentProcess);
-  const calculation = useTuringStore(state => state.calculation);
+export function VirtualNode({ data: { type } }: NodeProps<VirtualNode>) {
+  const calculations = useVirtualStore(state => state.calculations);
+  const position = useVirtualStore(state => state.position);
+  const tape = useVirtualStore(state => state.tape);
+  const current = useVirtualStore(state => state.currentProcess);
+  const calculation = useVirtualStore(state => state.calculation);
   const status = current === type ? 'active' : 'default';
+
+  useEffect(() => {
+    console.log('-----');
+    console.log('calculations', calculations);
+    console.log('calculation', calculation);
+  }, [calculation, calculations])
 
   const description = useMemo(() => {
     if (type === 'calc') {
-      return CALCULATIONS[calculation].description;
+      return calculations[calculation].description;
     }
     return DESCRIPTIONS[type];
-  }, [calculation, type])
+  }, [calculation, calculations, type])
 
   return (
     <div className={`react-flow__node-default rf-node rf-node_${type} rf-node_${status}`}>

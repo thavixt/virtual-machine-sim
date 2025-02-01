@@ -2,7 +2,7 @@ import { Container } from "./components/Container"
 import { Dashboard } from "./components/Dashboard"
 import { Header } from "./components/Header"
 import { TapeInput } from "./components/TapeInput"
-import { TuringMachine } from "./components/TuringMachine"
+import { VirtualMachine } from "./components/VirtualMachine"
 import { Flow } from "./flow/Flow"
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         <Header />
         <Dashboard />
         <TapeInput />
-        <TuringMachine />
+        <VirtualMachine />
       </div>
       <div className="px-2">
         <Container>

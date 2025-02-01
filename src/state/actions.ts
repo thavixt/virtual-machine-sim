@@ -1,7 +1,7 @@
-import { useTuringStore } from "./store";
+import { useVirtualStore } from "./store";
 
 function getState() {
-  return useTuringStore.getState();
+  return useVirtualStore.getState();
 }
 
 function logState(...params: unknown[]) {
@@ -9,11 +9,20 @@ function logState(...params: unknown[]) {
   console.log('params:', params);
 }
 
-export const TuringAction = {
+export const VirtualAction = {
   stop: () => {
-    console.info('Stopping Turing machine...');
+    console.info('Stopping Virtual machine...');
     getState().setIsRunning(false);
-    logState('Stopped Turing machine...');
+    logState('Stopped Virtual machine...');
+  },
+  // 'api' methods
+  back: (by = 1) => {
+    console.log(`Advance tape back by ${by}`);
+    getState().back();
+  },
+  forward: (by = 1) => {
+    console.log(`Advance tape forward by ${by}`);
+    getState().forward(2);
   }
 }
 

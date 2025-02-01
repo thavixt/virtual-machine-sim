@@ -1,7 +1,7 @@
-import { useTuringStore } from "../state";
+import { useVirtualStore } from "../state";
 
 export function OperationsLog() {
-  const logs = useTuringStore(state => state.logs);
+  const logs = useVirtualStore(state => state.logs);
 
   return (
     <div className="overflow-y-auto h-full border border-t-color5 rounded-md p-2">
