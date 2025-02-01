@@ -1,15 +1,18 @@
-import { Calculation, CALCULATIONS } from "./calculations";
+import { CALCULATIONS } from "./calculations";
 import { useTuringStore } from "../state";
 import { FormInput } from "../components/Input";
 import { useMemo } from "react";
 import { ListItem } from "../components/ListItem";
+import { Calculation } from "../types";
 
 export type DialogType = 'set' | 'create';
+
 export interface DialogEntry {
   form: JSX.Element;
   title: string;
   onSubmit: (formData: FormData) => void | Promise<void>;
 }
+
 export type Dialogs = Record<DialogType, DialogEntry>;
 
 /**

@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import { useRef, useEffect } from "react";
 import { useTuringStore } from "../state";
-
-export type ITape = Array<number>;
+import { ITape } from "../types";
 
 export function Tape() {
   const position = useTuringStore(state => state.position);

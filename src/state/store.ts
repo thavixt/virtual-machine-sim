@@ -1,8 +1,6 @@
 import { create } from 'zustand'
-import { ITape } from '../components/Tape';
-import { ProcessType } from '../flow/nodes/TuringNode';
-import { Calculation, CALCULATIONS } from '../logic/calculations';
-import { ErrorMessage } from '../types';
+import { CALCULATIONS } from '../logic/calculations';
+import { Calculation, ErrorMessage, ITape, ProcessType } from '../types';
 
 const DEFAULT_CALCULATION: Calculation = 'sumStep';
 const DEFAULT_LOGS: string[] = [];

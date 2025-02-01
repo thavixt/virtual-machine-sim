@@ -1,13 +1,4 @@
-import { ErrorMessage } from "../types";
-
-export type Calculation = 'sum' | 'sumStep' | 'sub';
-
-export interface CalculationFn {
-  name: string;
-  description: string;
-  tip?: string;
-  fn: (step: number, currentValue: number, ...inputs: number[]) => number;
-}
+import { Calculation, CalculationFn, ErrorMessage } from "../types";
 
 export const CALCULATIONS: Record<Calculation, CalculationFn> = {
   sum: {

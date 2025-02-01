@@ -3,8 +3,7 @@ import type { Node } from "@xyflow/react";
 import { useMemo } from "react";
 import { CALCULATIONS } from "../../logic/calculations";
 import { useTuringStore } from "../../state";
-
-export type ProcessType = 'input' | 'calc' | 'halt';
+import { ProcessType } from "../../types";
 
 export type TuringNode = Node<
   {
