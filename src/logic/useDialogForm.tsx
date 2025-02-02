@@ -1,5 +1,5 @@
 import { CALCULATIONS } from "./calculations";
-import { useVirtualStore } from "../state";
+import { useVirtualStore, VirtualAction } from "../state";
 import { FormInput } from "../components/Input";
 import { useMemo } from "react";
 import { ListItem } from "../components/ListItem";
@@ -33,14 +33,16 @@ export function useDialogForms() {
     set: {
       title: 'Set the function the Virtual machine applies:',
       form: (
-        <div className="flex space-x-4">
-          <label htmlFor="calcName">Select a method:</label>
-          <select name="calcName" id="calcName">
-            <option value="">-- Choose an option --</option>
+        <div className="w-full flex space-x-4 items-center">
+          <label htmlFor="calcName">Method:</label>
+          <select className="w-full h-8" name="calcName" id="calcName">
             {Object.entries(CALCULATIONS)
               .sort(([aKey], [bKey]) => aKey.localeCompare(bKey))
               .map(([key, value]) => {
-                const tooltip = `${value.description}\n\nTip:\n${value.tip ?? '-'}`
+                let tooltip = value.description
+                if (value.tip) {
+                  tooltip += `\n\nTip:\n${value.tip}`;
+                }
                 return (
                   <option
                     disabled={running}
@@ -85,21 +87,19 @@ export function useDialogForms() {
             placeholderValue={PLACEHOLDER_TIP}
           />
           <div className="flex flex-col space-y-2 text-gray-400 text-sm">
+            <div className="h-fit max-h-32 overflow-y-auto">
+              <p>Methods available:</p>
+              <ul className="list-disc list-inside">
+                <ListItem title="$vm_back(n: number)">advance the tape backwards <code>n</code> steps</ListItem>
+                <ListItem title="$vm_forward(n: number)">advance the tape forwards <code>n</code> steps</ListItem>
+              </ul>
+            </div>
+            <hr />
             <div>
-              <p>The above example is for the <code>even</code> method.</p>
+              <p>The default code example is for the <code>even</code> method.</p>
               <p>It receives the index of the current <code>step</code> (unused), the current <code>value</code> and the next <code>input</code> from the tape, and returns their sum.
                 If the result is even (divisible by 2), instead of returning it, the function throws an error, describing why the machine is halting.</p>
               <p>When throwing an <b>error</b>, do it as a <code>{'new Error({ message: "Something went wrong", result: 123 })'}</code>. The <code>result</code> is the would-be next value - which presumably is <b>halting</b> the machine</p>
-            </div>
-            <hr />
-            <p>Methods usable:</p>
-            <div className="h-32 overflow-y-auto">
-              <ul className="list-disc list-inside">
-                <ListItem title="back(n: number)">set the tape backwards <code>n</code> steps</ListItem>
-                <ListItem title="forward(n: number)">set the tape forwards <code>n</code> steps</ListItem>
-                {/* @todo */}
-                <ListItem title="TODO">other useful or interesting utils...</ListItem>
-              </ul>
             </div>
           </div>
         </div >
@@ -112,7 +112,9 @@ export function useDialogForms() {
         console.log({ calcName, calcFunction, calcTip });
         const testParams = [1, 2, 1];
         console.log('Testing method with parameters:', testParams)
-        const result = eval(`(${calcFunction})(${testParams.join(',')})`);
+        const builtInMethods = getAllUtilityMethods();
+        console.log(builtInMethods);
+        const result = eval(`${builtInMethods}(${calcFunction})(${testParams.join(',')})`);
         if (typeof result !== 'number') {
           throw new Error(`Invalid method - result ${result} (type: ${typeof result}) is not a number type`);
         }
@@ -129,4 +131,16 @@ export function useDialogForms() {
   }), [addCalculation, running, setCalculation]);
 
   return dialogForms;
+}
+
+function getAllUtilityMethods(): string {
+  const methods: string[] = [];
+
+  Object.keys(VirtualAction).forEach((key) => {
+    const methodDeclaration = `const $${key} = window.$vm_${key};`;
+    console.log('Method', `$${key} / global:$vm_${key}`, methodDeclaration);
+    methods.push(methodDeclaration)
+  });
+
+  return methods.join('\n');
 }

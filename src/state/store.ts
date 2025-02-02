@@ -5,7 +5,7 @@ import { Calculation, CalculationFn, ErrorMessage, ITape, ProcessType } from '..
 const DEFAULT_CALCULATION: Calculation = 'even';
 const DEFAULT_LOGS: string[] = [];
 const DEFAULT_POSITION = -1;
-const DEFAULT_STEP_MS = 200;
+const DEFAULT_STEP_MS = 300;
 const DEFAULT_TAPE: ITape = Array(10).fill(0).map(() => [0, 0, 8, 1, 2, 3]).flat();
 const DEFAULT_VALUE = 1;
 
@@ -107,13 +107,13 @@ export const useVirtualStore = create<VirtualState>()((set) => ({
         error = calcError;
         const errorMessage = JSON.parse(calcError.message) as ErrorMessage;
 
-        log = `${logPrefix} ${logFn} -> ${errorMessage.result}`;
+        log = `${logPrefix} ${logFn} -> ${errorMessage.result} (Halted, reason: ${errorMessage.reason})`;
 
         return {
-          currentValue: errorMessage.result,
           currentProcess: 'halt',
-          logs: [...state.logs, log, errorMessage.message],
+          currentValue: errorMessage.result,
           isRunning: false,
+          logs: [...state.logs, log],
         }
       }
 
@@ -157,8 +157,9 @@ export const useVirtualStore = create<VirtualState>()((set) => ({
       tapeString
     };
   }),
+
   forward: (by = 1) => set((state) => ({ position: Math.min(state.position + by, state.tape.length) })),
-  back: (by = 1) => set((state) => ({ position: Math.max(state.position - by, state.tape.length) })),
+  back: (by = 1) => set((state) => ({ position: Math.min(state.position - by, state.tape.length) })),
 
   // logging
   logs: DEFAULT_LOGS,

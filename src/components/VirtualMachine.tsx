@@ -2,6 +2,7 @@ import { StepCounter } from "./StepCounter";
 import { Tape } from "./Tape";
 import { VirtualAction, TurningState, useVirtualStore } from "../state";
 import { sleep } from "../logic/utils";
+import { ErrorMessage } from "../types";
 
 export function VirtualMachine() {
   const calculate = useVirtualStore(state => state.calculate);
@@ -23,7 +24,8 @@ export function VirtualMachine() {
     await sleep(stepMs / 2);
     const error = await calculate();
     if (error) {
-      console.warn(error);
+      const errorMessage = JSON.parse(error.message) as ErrorMessage;
+      console.warn(`Halted - reason: ${errorMessage.reason}`);
       return;
     }
     

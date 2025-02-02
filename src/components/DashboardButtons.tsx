@@ -36,10 +36,10 @@ export function DashboardButtons() {
         <div className="overflow-y-auto h-full space-x-2">
           <div className="flex flex-col space-y-2">
 
-            <div className="flex space-x-2 items-center">
+            <div className="grid grid-rows-1 grid-cols-2 items-center">
               <p>Current method:</p>
               <button
-                className="w-32"
+                className="w-full"
                 onClick={() => openDialog('set')}
                 title="Change method"
                 type="button"
@@ -48,14 +48,13 @@ export function DashboardButtons() {
                 {calculation.toString()}
               </button>
             </div>
-            <button
+            {/* <button
               disabled={running}
               onClick={() => openDialog('set')}
               type="button"
             >
-              Change current method
-            </button>
-            {/* @TODO: Create method funtionality */}
+              Update current method
+            </button> */}
             <button
               className="inverse"
               disabled={running}

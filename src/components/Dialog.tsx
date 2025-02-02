@@ -54,7 +54,7 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>((props, forward
           ) : null}
           <hr />
           <div className="flex space-x-2 justify-end">
-            <button type="button" onClick={() => onCancel()}>{cancel ?? 'Cancel'}</button>
+            <button type="button" onClick={() => onCancel()} className="inverse">{cancel ?? 'Cancel'}</button>
             <button type="submit">{submit ?? 'Apply'}</button>
           </div>
         </div>

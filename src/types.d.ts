@@ -15,6 +15,6 @@ export interface TapeValueProps {
 }
 
 export interface ErrorMessage {
-  message: string;
+  reason: string;
   result: number;
 }

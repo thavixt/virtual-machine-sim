@@ -10,7 +10,7 @@ export function Tape() {
   return (
     <div className="min-w-0 flex flex-col justify-center w-full">
       <div className="overflow-x-auto overflow-y-hidden">
-        <div className="flex h-full space-x-1">
+        <div className="flex h-full">
           {tape.map((v, i) => (
             <TapeValue key={i} value={v} current={i === position} />
           ))}
@@ -35,9 +35,9 @@ export function TapeValue({ current, value }: TapeValueProps) {
   }, [current]);
 
   const classes = classNames({
-    'border-t-color2 border-2': current,
-    'border-t-color3': !current,
-  }, 'border-t-4 rounded-sm w-fit text-center px-1')
+    'border-t-color3': current,
+    'border-transparent': !current,
+  }, 'border-2 rounded-sm w-fit text-center px-1')
   return (
     <div ref={ref} className={classes}>{value}</div>
   )

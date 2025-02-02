@@ -4,7 +4,7 @@ const sumCalc: CalculationFn['fn'] = (_step, current, input) => {
   const result = current + input;
   if (!(result % 5)) {
     const errorMessage: ErrorMessage = {
-      message: `${result} is divisible by 5 ((${current} + ${input}) % 5 = ${result / 5}) => halt`,
+      reason: `${result} is divisible by 5 ((${current} + ${input}) % 5 = ${result / 5}) => halt`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -16,7 +16,7 @@ const sumStepCalc: CalculationFn['fn'] = (step, current) => {
   const result = current + step;
   if (result >= 1000) {
     const errorMessage: ErrorMessage = {
-      message: `${result} reached 1000 ((${current} + ${step}) >= ${1000}) => halt`,
+      reason: `${result} reached 1000 ((${current} + ${step}) >= ${1000})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -28,7 +28,7 @@ const subCalc: CalculationFn['fn'] = (_step, current, input) => {
   const result = current - input;
   if (!(result % 4)) {
     const errorMessage: ErrorMessage = {
-      message: `${result} is divisible by 4 ((${current} - ${input}) % 4 = ${result / 4}) => halt`,
+      reason: `${result} is divisible by 4 ((${current} - ${input}) % 4 = ${result / 4})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -40,7 +40,7 @@ const evenCalc: CalculationFn['fn'] = (_step, current, input) => {
   const result = current + input;
   if (!(result % 2)) {
     const errorMessage: ErrorMessage = {
-      message: `${result} is even ((${current} + ${input}) % 2 = ${result % 2}) => halt`,
+      reason: `${result} is even ((${current} + ${input}) % 2 = ${result % 2})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -52,7 +52,7 @@ const oddCalc: CalculationFn['fn'] = (_step, current, input) => {
   const result = current + input;
   if (result % 2) {
     const errorMessage: ErrorMessage = {
-      message: `${result} is odd ((${current} + ${input}) % 2 = ${result % 2}) => halt`,
+      reason: `${result} is odd ((${current} + ${input}) % 2 = ${result % 2})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
