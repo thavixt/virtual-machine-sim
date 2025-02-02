@@ -1,6 +1,6 @@
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import type { Node } from "@xyflow/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useVirtualStore } from "../../state";
 import { ProcessType } from "../../types";
 
@@ -29,12 +29,6 @@ export function VirtualNode({ data: { type } }: NodeProps<VirtualNode>) {
   const current = useVirtualStore(state => state.currentProcess);
   const calculation = useVirtualStore(state => state.calculation);
   const status = current === type ? 'active' : 'default';
-
-  useEffect(() => {
-    console.log('-----');
-    console.log('calculations', calculations);
-    console.log('calculation', calculation);
-  }, [calculation, calculations])
 
   const description = useMemo(() => {
     if (type === 'calc') {

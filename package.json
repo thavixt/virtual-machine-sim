@@ -13,6 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
     "@uiw/react-codemirror": "^4.23.7",
     "classnames": "^2.5.1",
     "react": "^19",

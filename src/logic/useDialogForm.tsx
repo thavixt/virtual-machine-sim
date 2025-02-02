@@ -4,6 +4,7 @@ import { FormInput } from "../components/Input";
 import { useMemo } from "react";
 import { ListItem } from "../components/ListItem";
 import { Calculation } from "../types";
+import { CodeEditor } from "../components/CodeEditor";
 
 export type DialogType = 'set' | 'create';
 
@@ -18,7 +19,7 @@ export type Dialogs = Record<DialogType, DialogEntry>;
 const PLACEHOLDER_NAME = `My custom function`;
 const PLACEHOLDER_DESCRIPTION = `This method does x and y, and halts when z occurs`;
 const PLACEHOLDER_FUNCTION_CODE = CALCULATIONS.even.fn.toString();
-const PLACEHOLDER_TIP = `Describe your function here ...`;
+const PLACEHOLDER_TIP = `Optional: Describe a useful thing you can do with this`;
 
 /**
  * @todo maybe this dialog list should just be a basic list of components instead of a hook, hm
@@ -64,15 +65,31 @@ export function useDialogForms() {
       title: 'Create a method for the Virtual machine to apply every step',
       form: (
         <div className="flex flex-col space-y-4">
-          <FormInput name="calcName" label="Function name" defaultValue={PLACEHOLDER_NAME} />
-          <FormInput name="calcDescription" label="Description" defaultValue={PLACEHOLDER_DESCRIPTION} />
-          <FormInput name="calcFunction" label="Code (Javascript)" type="textarea" info={`JavaScript code`} className="font-mono" defaultValue={PLACEHOLDER_FUNCTION_CODE} />
-          <FormInput name="calcTip" label="Tip" defaultValue={PLACEHOLDER_TIP} />
-          <div className="flex flex-col space-y-2 text-gray-400">
+          <FormInput
+            label="Function name"
+            name="calcName"
+            placeholderValue={PLACEHOLDER_NAME}
+          />
+          <FormInput
+            label="Description"
+            name="calcDescription"
+            placeholderValue={PLACEHOLDER_DESCRIPTION}
+          />
+          <CodeEditor
+            defaultValue={PLACEHOLDER_FUNCTION_CODE}
+            name="calcFunction"
+          />
+          <FormInput
+            label="Tip"
+            name="calcTip"
+            placeholderValue={PLACEHOLDER_TIP}
+          />
+          <div className="flex flex-col space-y-2 text-gray-400 text-sm">
             <div>
-              <p>The example is for the <code>even</code> method.</p>
-              <p>It receives the index of the current <b>step</b> (unused), the <b>current</b> value and the next <b>input</b> from the tape, and returns their sum.
-                If the result would be even (divisible by 2), instead of returning it, the function throws an error, describing why the machine is halting.</p>
+              <p>The above example is for the <code>even</code> method.</p>
+              <p>It receives the index of the current <code>step</code> (unused), the current <code>value</code> and the next <code>input</code> from the tape, and returns their sum.
+                If the result is even (divisible by 2), instead of returning it, the function throws an error, describing why the machine is halting.</p>
+              <p>When throwing an <b>error</b>, do it as a <code>{'new Error({ message: "Something went wrong", result: 123 })'}</code>. The <code>result</code> is the would-be next value - which presumably is <b>halting</b> the machine</p>
             </div>
             <hr />
             <p>Methods usable:</p>

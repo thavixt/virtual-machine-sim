@@ -5,8 +5,12 @@ function getState() {
 }
 
 function logState(...params: unknown[]) {
-  console.log(getState());
-  console.log('params:', params);
+  console.log(
+    'VirtualAction performed => Params:',
+    params,
+    'State: ',
+    getState(),
+  );
 }
 
 export const VirtualAction = {

@@ -13,7 +13,7 @@ const DIALOG_FORM_NAME = 'dialogForm'
 
 export const Dialog = forwardRef<HTMLDialogElement, DialogProps>((props, forwardedRef) => {
   const { cancel, onSubmit, submit, onCancel: onDialogCancel, children, title } = props;
-  const [error, setError] = useState<string | null>('asd')
+  const [error, setError] = useState<string | null>(null)
 
   const ref = useRef<HTMLDialogElement>(null);
   useImperativeHandle(forwardedRef, () => ref.current as HTMLDialogElement);
