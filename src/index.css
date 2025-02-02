@@ -26,12 +26,17 @@
   }
 }
 
-:root {
+#root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-t-color5 text-t-color4 font-sans;
+  @apply text-t-color4 font-sans fixed left-0 right-0 z-40;
+}
+
+#background-image {
+  @apply fixed left-0 right-0 z-0 block size-full bg-no-repeat bg-cover grayscale-100;
+  background-image: url('https://img.freepik.com/free-vector/gradient-network-connection-background_23-2148902184.jpg?t=st=1738526451~exp=1738530051~hmac=1fb4a7a191b63b63a7f28e8a1a46e242a721872bd5ddfa6582127f10732352b4&w=1380');
 }
 
 * {
@@ -62,6 +67,10 @@ code {
 
 /* buttons */
 
+button {
+  @apply cursor-pointer;
+}
+
 button.start {
   @apply bg-green-600
 }
@@ -72,11 +81,11 @@ button.reset {
 }
 
 button.inverse {
-  @apply text-t-color5 hover:text-t-color1 bg-t-color1 border-t-color5 border
+  @apply text-t-color5  bg-gray-100 border-t-color5 border
 }
 
 button {
-  @apply text-t-color1 bg-t-color4 hover:bg-t-color5 rounded-md px-2 h-8
+  @apply text-t-color1 bg-t-color4  hover:opacity-75 hover:shadow-md rounded-md px-2 h-8
 }
 
 /* inputs */
@@ -95,11 +104,6 @@ select {
   /* React Flow style vars */
   --xy-background-color: whitesmoke;
   @apply text-t-color4;
-}
-
-.rf-node {
-  background: #777;
-  color: white;
 }
 
 .rf-node_active {
