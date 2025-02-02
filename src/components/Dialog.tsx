@@ -1,4 +1,4 @@
-import { forwardRef, PropsWithChildren, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, PropsWithChildren, useImperativeHandle, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type DialogProps = PropsWithChildren<{
@@ -34,10 +34,10 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>((props, forward
     ref.current?.close();
   }
 
-  const onCancel = useCallback(() => {
+  const onCancel = () => {
     onDialogCancel?.();
     ref.current?.close();
-  }, [onDialogCancel]);
+  };
 
   return createPortal(
     <dialog ref={ref} className="m-auto p-6 rounded-lg border-2 border-t-color5 shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-md w-fit max-w-[900px]">

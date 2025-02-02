@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Dialog } from "./Dialog";
 import { DialogType, useDialogForms } from "../logic/useDialogForm";
 import { useVirtualStore } from "../state";
@@ -11,14 +11,14 @@ export function DashboardButtons() {
   const running = useVirtualStore(state => state.isRunning);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const openDialog = useCallback((type: DialogType | null) => {
+  const openDialog = (type: DialogType | null) => {
     if (!type) {
       dialogRef.current?.close();
       return;
     }
     setActiveDialog(type);
     dialogRef.current?.showModal();
-  }, []);
+  };
 
   return (
     <>

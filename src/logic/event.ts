@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 type EventName = string;
 type EventHandler<T extends Record<string, unknown>> = ((params: T) => void | Promise<void>);
@@ -37,10 +37,10 @@ export function useRegisterEvent<T extends EventPayload>(eventName: EventName, e
  * - Use the `registerEvent` hook to first register the CustomEvent
  */
 export function useEvent<T extends EventPayload>(eventName: EventName): EventTrigger<T> {
-  return useCallback((params: T) => {
+  return (params: T) => {
     const event = new CustomEvent(eventName, { detail: params });
     getVirtualEventTarget().dispatchEvent(event);
-  }, [eventName]);
+  };
 }
 
 export function fireEvent<T extends EventPayload>(eventName: EventName, params: T) {
@@ -86,10 +86,10 @@ function Trigger() {
 function Handler() {
   const [times, setTimes] = useState(0);  const [lastDetails, setLastDetails] = useState<Record<string, unknown>>({});
 
- const eventHandler = useCallback((params: MyCustomEventDetails) => {
+ const eventHandler = (params: MyCustomEventDetails) => {
    setTimes(t => t + 1);
    setLastDetails(params);
- }, []);
+ };
 
  useRegisterEvent<MyCustomEventDetails>(eventName, eventHandler)
 

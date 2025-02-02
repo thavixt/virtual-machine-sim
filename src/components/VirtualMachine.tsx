@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { StepCounter } from "./StepCounter";
 import { Tape } from "./Tape";
 import { VirtualAction, TurningState, useVirtualStore } from "../state";
@@ -13,7 +12,7 @@ export function VirtualMachine() {
   const step = useVirtualStore(state => state.forward);
   const stepMs = useVirtualStore(state => state.stepMs);
 
-  const performCalculation = useCallback(async () => {
+  const performCalculation = async () => {
     setRunning(true);
 
     step();
@@ -32,12 +31,12 @@ export function VirtualMachine() {
       return;
     }
     await performCalculation();
-  }, [calculate, setCurrent, setRunning, step, stepMs]);
+  };
 
-  const start = useCallback(() => {
+  const start = () => {
     reset();
     performCalculation();
-  }, [reset, performCalculation])
+  }
 
   return (
     <div className="containerBox flex px-2 space-x-2 items-center">
