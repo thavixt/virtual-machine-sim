@@ -8,7 +8,7 @@ import { Calculation } from "../types";
 export type DialogType = 'set' | 'create';
 
 export interface DialogEntry {
-  form: JSX.Element;
+  form: React.ReactElement;
   title: string;
   onSubmit: (formData: FormData) => void | Promise<void>;
 }
