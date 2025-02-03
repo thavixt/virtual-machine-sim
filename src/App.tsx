@@ -16,11 +16,7 @@ function App() {
       </div>
       <div className="px-2 row-span-4">
         <Container>
-          {(width, height) => (
-            <div className="bg-slate-400" style={{ width, height }}>
-              <Flow />
-            </div>
-          )}
+          {(width, height) => <Flow key={`${width}x${height}`} />}
         </Container>
       </div>
     </div>

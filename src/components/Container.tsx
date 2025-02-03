@@ -1,20 +1,26 @@
-import { ReactNode, useRef, useState, useLayoutEffect } from "react";
+import { ReactNode, useRef, useState, useEffect } from "react";
 
 /**
- * Render child with parent's inner dimensions
+ * Render child with parent's scroll dimensions
  */
 export function Container({ children }: { children: (width: number, height: number) => ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  useLayoutEffect(() => {
-    setWidth(ref.current?.scrollWidth ?? 0)
-    setHeight(ref.current?.scrollHeight ?? 0)
-  }, [width, height]);
+  useEffect(() => {
+    if (!elementRef.current) return;
+    const resizeObserver = new ResizeObserver(([entry]) => {
+      setWidth(entry.contentRect.width)
+      setHeight(entry.contentRect.height)
+    });
+
+    resizeObserver.observe(elementRef.current);
+    return () => resizeObserver.disconnect(); // clean up 
+  }, []);
 
   return (
-    <div ref={ref} className="w-full h-full">
+    <div ref={elementRef} className="size-full">
       {(!width || !height) ? (
         <div>Loading ...</div>
       ) : (
