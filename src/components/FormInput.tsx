@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-interface FormInputPropsDefault {
+interface FormInputProps {
   className?: string;
   type?: 'text' | 'textarea' | 'number';
   info?: string;
@@ -16,40 +16,30 @@ interface FormInputPropsDefault {
   max?: number;
 }
 
-type FormInputProps = FormInputPropsDefault & ({
+export function FormInput(props: FormInputProps & {
+  type: 'text' | 'textarea';
+  min?: void;
+  max?: void;
+}): React.ReactElement
+export function FormInput(props: FormInputProps & {
   type: 'number';
   min: number;
   max: number;
-} | {
-  min: void;
-  max: void;
-})
+}): React.ReactElement
+export function FormInput(props: FormInputProps): React.ReactElement {
+  const {
+    className = '',
+    defaultValue,
+    info,
+    label = 'Input',
+    max,
+    min,
+    name,
+    placeholderValue,
+    type = 'text',
+    value,
+  } = props;
 
-// interface FormInputProps {
-//   className?: string;
-//   type?: 'text' | 'textarea' | 'number';
-//   info?: string;
-//   label?: string;
-
-//   name: string;
-
-//   value?: string | number;
-//   defaultValue?: string | number;
-//   placeholderValue?: string;
-// }
-
-export function FormInput({
-  className = '',
-  defaultValue,
-  info,
-  label = 'Input',
-  max,
-  min,
-  name,
-  placeholderValue,
-  type = 'text',
-  value,
-}: FormInputProps) {
   return (
     <div className="grid grid-cols-10 grid-rows-1 gap-2">
       <label className="col-span-2" htmlFor={name}>{label}:</label>
@@ -90,7 +80,7 @@ export function FormInput({
             type="number"
             value={value}
           />
-        ): null}
+        ) : null}
         <p className="text-slate-400 w-full whitespace-pre">{info}</p>
       </div>
     </div>

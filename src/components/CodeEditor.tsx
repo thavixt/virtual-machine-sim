@@ -19,6 +19,7 @@ export function CodeEditor({ label = 'Javascript code', defaultValue, name }: Co
     <div className="grid grid-cols-10 grid-rows-1">
       <div className="col-span-2">
         <FormInput
+          type="text"
           className="hidden"
           label={label}
           name={name}

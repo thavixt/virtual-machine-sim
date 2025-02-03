@@ -11,10 +11,28 @@ const PLACEHOLDER_TIP = `Optional: Describe a useful thing you can do with this`
 export function CreateDialog() {
   return (
     <div className="flex flex-col space-y-4">
-      <FormInput label="Function name" name="calcName" placeholderValue={PLACEHOLDER_NAME} />
-      <FormInput label="Description" name="calcDescription" placeholderValue={PLACEHOLDER_DESCRIPTION} />
-      <CodeEditor defaultValue={PLACEHOLDER_FUNCTION_CODE} name="calcFunction" />
-      <FormInput label="Tip" name="calcTip" placeholderValue={PLACEHOLDER_TIP} />
+      <FormInput
+        type="text"
+        label="Function name"
+        name="calcName"
+        placeholderValue={PLACEHOLDER_NAME}
+      />
+      <FormInput
+        type="text"
+        label="Description"
+        name="calcDescription"
+        placeholderValue={PLACEHOLDER_DESCRIPTION}
+      />
+      <CodeEditor
+        defaultValue={PLACEHOLDER_FUNCTION_CODE}
+        name="calcFunction"
+      />
+      <FormInput
+        type="text"
+        label="Tip"
+        name="calcTip"
+        placeholderValue={PLACEHOLDER_TIP}
+      />
       <div className="flex flex-col space-y-2 text-gray-400 text-sm">
         <div className="h-fit max-h-32 overflow-y-auto">
           <p>Methods available:</p>
