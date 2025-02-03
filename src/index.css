@@ -36,7 +36,7 @@
 
 #background {
   @apply fixed left-0 right-0 z-0 block size-full bg-no-repeat bg-cover grayscale;
-  background-image: url('./background.png');
+  background-image: url('./assets/background.png');
 }
 
 * {
