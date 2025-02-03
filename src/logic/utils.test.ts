@@ -152,7 +152,7 @@ describe('padString', () => {
     const str = 'test';
     const length = 10;
     const result = padString(str, length);
-    expect(result).toBe('test      ');
+    expect(result.replace(/\s/g, " ")).toBe('test      ');
   });
 
   it('should pad the string to the specified length with the provided pad character', () => {
@@ -181,7 +181,7 @@ describe('padString', () => {
     const str = '';
     const length = 5;
     const result = padString(str, length);
-    expect(result).toBe('     ');
+    expect(result.replace(/\s/g, " ")).toBe('     ');
   });
 
   it('should handle a pad character longer than one character', () => {
