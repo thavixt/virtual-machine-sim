@@ -2,22 +2,6 @@
 
 Inspired by: https://youtu.be/HeQX2HjkcNo?si=AChtSkHAxsGK9RO1&t=1416
 
-## todo:
-
-- run tape:
-  - [x] ~~timer~~ recursive with tail call, interrupted if flag set
-  - [x] writes log - bold if halting
-  - [x] advances the tape display
-  - [x] runs calc (zustand store?)
-  - ... todo
-- create node
-  - [x] modal
-  - ... todo
-- edit node
-  - ... todo
-- i18n
-  - ... todo
-
 # Notes
 
 - inspiration from a youtube video: https://youtu.be/HeQX2HjkcNo?si=AChtSkHAxsGK9RO1&t=1416

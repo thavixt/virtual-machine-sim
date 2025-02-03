@@ -10,10 +10,8 @@ import { VirtualAction } from './state/actions.ts'
  * Add all the VirtualAction members to the global scope
  * to be able to access them in misc. scripts on the page
  */
-// @ts-expect-error back
-window.$vm_back = VirtualAction.back;
-// @ts-expect-error forward
-window.$vm_forward = VirtualAction.forward;
+// @ts-expect-error reverse
+window.$vm_reverse = VirtualAction.reverse;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

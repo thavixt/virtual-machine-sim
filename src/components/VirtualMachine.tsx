@@ -10,13 +10,13 @@ export function VirtualMachine() {
   const running = useVirtualStore(state => state.isRunning);
   const setCurrent = useVirtualStore(state => state.setCurrentProcess);
   const setRunning = useVirtualStore(state => state.setIsRunning);
-  const step = useVirtualStore(state => state.forward);
+  const advance = useVirtualStore(state => state.advance);
   const stepMs = useVirtualStore(state => state.stepMs);
 
   const performCalculation = async () => {
     setRunning(true);
 
-    step();
+    advance();
     setCurrent('input');
     await sleep(stepMs / 2);
 
@@ -25,7 +25,7 @@ export function VirtualMachine() {
     const error = await calculate();
     if (error) {
       const errorMessage = JSON.parse(error.message) as ErrorMessage;
-      console.warn(`Halted - reason: ${errorMessage.reason}`);
+      console.warn(`Halted, reason: ${errorMessage.reason}`);
       return;
     }
     

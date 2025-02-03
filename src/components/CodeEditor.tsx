@@ -1,7 +1,7 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { useState, useCallback } from 'react';
-import { FormInput } from './Input';
+import { FormInput } from './FormInput';
 
 interface CodeEditorProps {
   label?: string;

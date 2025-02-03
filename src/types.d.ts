@@ -18,3 +18,5 @@ export interface ErrorMessage {
   reason: string;
   result: number;
 }
+
+export type Direction = 'back' | 'forward';

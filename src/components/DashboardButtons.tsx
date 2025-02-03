@@ -4,7 +4,7 @@ import { DialogType, useDialogForms } from "../logic/useDialogForm";
 import { useVirtualStore } from "../state";
 
 export function DashboardButtons() {
-  const [activeDialog, setActiveDialog] = useState<DialogType>('set');
+  const [activeDialog, setActiveDialog] = useState<DialogType>('select');
   const dialogForms = useDialogForms();
 
   const calculation = useVirtualStore(state => state.calculation);
@@ -36,25 +36,23 @@ export function DashboardButtons() {
         <div className="overflow-y-auto h-full space-x-2">
           <div className="flex flex-col space-y-2">
 
-            <div className="grid grid-rows-1 grid-cols-2 items-center">
-              <p>Current method:</p>
-              <button
-                className="w-full"
-                onClick={() => openDialog('set')}
-                title="Change method"
-                type="button"
-                disabled={running}
-              >
-                {calculation.toString()}
-              </button>
+            <div className="grid grid-rows-1 grid-cols-2 text-center">
+              <div className="flex flex-col items-start">
+                <span>Current method:</span>
+              </div>
+              <div className="flex flex-col space-y-1">
+                <button
+                  className="w-full"
+                  onClick={() => openDialog('select')}
+                  title="Change method"
+                  type="button"
+                  disabled={running}
+                >
+                  {calculation.toString()}
+                </button>
+                <small>(click to change)</small>
+              </div>
             </div>
-            {/* <button
-              disabled={running}
-              onClick={() => openDialog('set')}
-              type="button"
-            >
-              Update current method
-            </button> */}
             <button
               className="inverse"
               disabled={running}
@@ -62,6 +60,14 @@ export function DashboardButtons() {
               type="button"
             >
               Create a new method
+            </button>
+            <button
+              className="inverse"
+              disabled={running}
+              onClick={() => openDialog('createTape')}
+              type="button"
+            >
+              Create a random tape
             </button>
           </div>
         </div>

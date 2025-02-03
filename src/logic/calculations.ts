@@ -2,9 +2,21 @@ import { Calculation, CalculationFn, ErrorMessage } from "../types";
 
 const sumCalc: CalculationFn['fn'] = (_step, current, input) => {
   const result = current + input;
-  if (!(result % 5)) {
+  if (!(result % 10) && result != 0) {
     const errorMessage: ErrorMessage = {
-      reason: `${result} is divisible by 5 ((${current} + ${input}) % 5 = ${result / 5}) => halt`,
+      reason: `${result} is divisible by 10 ((${current} + ${input}) % 10 = ${result / 10}) => halt`,
+      result: result,
+    };
+    const msg = JSON.stringify(errorMessage as ErrorMessage)
+    throw new Error(msg);
+  }
+  return result;
+}
+const subCalc: CalculationFn['fn'] = (_step, current, input) => {
+  const result = current - input;
+  if (!(result % 9) && result != 0) {
+    const errorMessage: ErrorMessage = {
+      reason: `${result} is divisible by 9 ((${current} - ${input}) % 9 = ${result % 9})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -24,11 +36,12 @@ const sumStepCalc: CalculationFn['fn'] = (step, current) => {
   }
   return result;
 }
-const subCalc: CalculationFn['fn'] = (_step, current, input) => {
-  const result = current - input;
-  if (!(result % 4)) {
+
+const oddCalc: CalculationFn['fn'] = (_step, current, input) => {
+  const result = current + input;
+  if (result % 2) {
     const errorMessage: ErrorMessage = {
-      reason: `${result} is divisible by 4 ((${current} - ${input}) % 4 = ${result / 4})`,
+      reason: `${result} is odd ((${current} + ${input}) % 2 = ${result % 2})`,
       result: result,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -48,24 +61,11 @@ const evenCalc: CalculationFn['fn'] = (_step, current, input) => {
   }
   return result;
 }
-const oddCalc: CalculationFn['fn'] = (_step, current, input) => {
-  const result = current + input;
-  if (result % 2) {
-    const errorMessage: ErrorMessage = {
-      reason: `${result} is odd ((${current} + ${input}) % 2 = ${result % 2})`,
-      result: result,
-    };
-    const msg = JSON.stringify(errorMessage as ErrorMessage)
-    throw new Error(msg);
-  }
-  return result;
-}
-
 export const CALCULATIONS: Record<Calculation, CalculationFn> = {
   sum: {
     name: 'Sum value',
-    description: 'Sum current and next values, halt if divisible by 5',
-    tip: 'Start with a small input number and wait until the counter reaches a number divisible by 5',
+    description: 'Sum current and next values, halt if divisible by 10',
+    tip: 'Start with a small input number and wait until the counter reaches a number divisible by 10',
     fn: sumCalc,
   },
   sumStep: {
@@ -75,8 +75,8 @@ export const CALCULATIONS: Record<Calculation, CalculationFn> = {
   },
   sub: {
     name: 'Subtract value',
-    description: 'Subtract the next value from the current value, halt if divisible by 4',
-    tip: 'Start with a bigger number and wait until the counter descends to a number divisible by 4',
+    description: 'Subtract the next value from the current value, halt if divisible by 9',
+    tip: 'Start with a bigger number and wait until the counter descends to a number divisible by 9',
     fn: subCalc,
   },
   even: {

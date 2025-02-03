@@ -20,14 +20,10 @@ export const VirtualAction = {
     logState('Stopped Virtual machine...');
   },
   // 'api' methods
-  back: (by = 1) => {
+  reverse: (by = 1) => {
     console.log(`Advance tape back by ${by}`);
-    getState().back();
+    getState().reverse();
   },
-  forward: (by = 1) => {
-    console.log(`Advance tape forward by ${by}`);
-    getState().forward(2);
-  }
 }
 
 export const TurningState = {

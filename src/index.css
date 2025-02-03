@@ -6,7 +6,19 @@
   --color-t-color3: #f4b860;
   --color-t-color4: #32373b;
   --color-t-color5: #4a5859;
+
+  --animate-appear: appear 0.35s ease-in-out;
 }
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
+
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -91,11 +103,11 @@ button {
 /* inputs */
 
 input, textarea {
-  @apply bg-gray-600 text-t-color1 px-2 py-1 ml-2 rounded-md;
+  @apply bg-gray-600 text-t-color1 px-2 py-1 ml-2 rounded-md font-mono;
 }
 
 select {
-  @apply border border-slate-800 rounded-md
+  @apply border border-slate-800 rounded-md bg-gray-600 text-t-color1 font-mono whitespace-pre;
 }
 
 /* React Flow styles */
@@ -116,4 +128,36 @@ select {
 
 .rf-node_active.rf-node_halt {
   @apply bg-t-color2! text-t-color1!
+}
+
+/* Spinner SVG */
+.spinner {
+  @apply stroke-t-color4 ;
+  stroke-width: 4;
+  transform-origin: center;
+}
+
+.spinner.circle {
+  @apply fill-t-color5;
+}
+
+.spinner.rect {
+  @apply fill-t-color3;
+  fill-opacity: 0.5;
+  animation: spinnerRotation 2s infinite alternate-reverse;
+}
+
+.spinner.hex {
+  @apply fill-t-color2;
+  animation: spinnerRotation 2s infinite;
+}
+
+@keyframes spinnerRotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
 }

@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest --silent",
+    "tdd": "vitest --watch --changed"
   },
   "dependencies": {
     "@codemirror/lang-javascript": "^6.2.2",

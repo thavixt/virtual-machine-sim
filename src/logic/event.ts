@@ -5,10 +5,11 @@ type EventHandler<T extends Record<string, unknown>> = ((params: T) => void | Pr
 type EventTrigger<T extends Record<string, unknown>> = (params: T) => void
 type EventPayload = Record<string, unknown>;
 
-const EVENT_TARGET_QUERY_SELECTOR = '#virtualEventTarget';
+const EVENT_TARGET_ID = 'virtualEventTarget';
 const LISTENERS: Record<EventName, EventListener> = {};
 
 /**
+ * @unused
  * - Create a CustomEvent registration
  * - Use the `useEvent` hook to fire the appropriate CustomEvent
  */
@@ -33,6 +34,7 @@ export function useRegisterEvent<T extends EventPayload>(eventName: EventName, e
 }
 
 /**
+ * @unused
  * - Lister for a CustomEvent
  * - Use the `registerEvent` hook to first register the CustomEvent
  */
@@ -49,7 +51,20 @@ export function fireEvent<T extends EventPayload>(eventName: EventName, params: 
 }
 
 function getVirtualEventTarget(): HTMLDivElement {
-  return document.body.querySelector<HTMLDivElement>(EVENT_TARGET_QUERY_SELECTOR)!;
+  const getTarget = () => {
+    return document.body.querySelector<HTMLDivElement>(`#${EVENT_TARGET_ID}`);
+  }
+
+  const target = getTarget();
+  // if the event target is not present in the DOM, create one
+  if (!target) {
+    const div = document.createElement('div');
+    div.id = EVENT_TARGET_ID;
+    document.body.appendChild(div);
+    return getTarget()!;
+  }
+
+  return target;
 }
 
 /** Example usage in a React component */

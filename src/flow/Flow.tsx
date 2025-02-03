@@ -7,26 +7,24 @@ import { DEFAULT_EDGES, edgeTypes } from "./edges";
 
 export function Flow() {
   return (
-    <div className="size-full">
-      <ReactFlow
-        className="react-flow-custom"
-        fitView
-        edgeTypes={edgeTypes}
-        edges={DEFAULT_EDGES}
-        nodeTypes={nodeTypes}
-        nodes={DEFAULT_NODES}
-        // disable interactions
-        draggable={false}
-        edgesFocusable={false}
-        elementsSelectable={false}
-        nodesConnectable={false}
-        nodesDraggable={false}
-        nodesFocusable={false}
-        panOnDrag={false}
-        zoomOnScroll={false}
-      >
-        <Background/>
-      </ReactFlow>
-    </div>
+    <ReactFlow
+      className="react-flow-custom"
+      fitView
+      edgeTypes={edgeTypes}
+      edges={DEFAULT_EDGES}
+      nodeTypes={nodeTypes}
+      nodes={DEFAULT_NODES}
+      // disable interactions
+      draggable={false}
+      edgesFocusable={false}
+      elementsSelectable={false}
+      nodesConnectable={false}
+      nodesDraggable={false}
+      nodesFocusable={false}
+      panOnDrag={false}
+      zoomOnScroll={false}
+    >
+      <Background />
+    </ReactFlow>
   );
 }

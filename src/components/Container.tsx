@@ -1,4 +1,5 @@
 import { ReactNode, useRef, useState, useEffect } from "react";
+import { Spinner } from "./Spinner";
 
 /**
  * Render child with parent's scroll dimensions
@@ -20,9 +21,11 @@ export function Container({ children }: { children: (width: number, height: numb
   }, []);
 
   return (
-    <div ref={elementRef} className="size-full">
+    <div ref={elementRef} className="size-full flex items-center justify-center bg-t-color1 p-1 rounded-lg">
       {(!width || !height) ? (
-        <div>Loading ...</div>
+        <div className="size-full flex items-center justify-center">
+          <Spinner/>
+        </div>
       ) : (
         children(width, height)
       )}

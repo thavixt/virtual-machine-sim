@@ -1,58 +1,40 @@
 import { create } from 'zustand'
 import { CALCULATIONS } from '../logic/calculations';
 import { Calculation, CalculationFn, ErrorMessage, ITape, ProcessType } from '../types';
+import { getRandomInt, getRandomKey, getRandomTape, sleep } from '../logic/utils';
+import { IStore } from './IStore';
 
-const DEFAULT_CALCULATION: Calculation = 'even';
+const DEFAULT_CALCULATION: Calculation = (() => {
+  const value = getRandomKey(CALCULATIONS, 'add');
+  console.debug('DEFAULT_CALCULATION:', value);
+  return value;
+})();
+const DEFAULT_TAPE: ITape = (() => {
+  const value = getRandomTape(getRandomInt(0, 100), 0, 100);
+  console.debug('DEFAULT_TAPE:', value);
+  return value;
+})();
+
 const DEFAULT_LOGS: string[] = [];
 const DEFAULT_POSITION = -1;
-const DEFAULT_STEP_MS = 300;
-const DEFAULT_TAPE: ITape = Array(10).fill(0).map(() => [0, 0, 8, 1, 2, 3]).flat();
+const DEFAULT_STEP_MS = 200;
 const DEFAULT_VALUE = 1;
 
-export const HALT_NODE = 'halt';
-export const START_NODE = 'inputStart';
+export const useVirtualStore = create<IStore>()((set, get) => ({
+  init: async () => {
+    const phase = get().initPhase;
+    if (['pending', 'ready'].includes(phase)) {
+      return;
+    }
+    set(() => ({initPhase: 'pending'}))
+    const ms = getRandomInt(250, 500);
+    console.debug(`Init in ${ms}ms`)
+    await sleep(ms);
+    set(() => ({initPhase: 'ready'}))
+  },
+  // for now, skip the initialization stuff, @todo maybe do something interesting later
+  initPhase: 'ready',
 
-interface VirtualState {
-  // logging
-  logs: string[];
-  addLog: (log: string) => void;
-
-  // react-flow
-  // edges: Edge[];
-  // nodes: AppNode[];
-  // addEdge: (edge: Edge) => void;
-  // addNode: (node: AppNode) => void;
-
-  // tape
-  position: number;
-  tape: ITape;
-  tapeString: string;
-  setTape: (tape: ITape) => void;
-  setTapeString: (tape: string) => void;
-
-  // virtual machine
-  calculation: Calculation;
-  currentProcess: ProcessType;
-  currentValue: number;
-  initialInputValue: number;
-  stepMs: number;
-  addCalculation: (calc: CalculationFn) => void,
-  calculations: Record<Calculation, CalculationFn>,
-  calculate: () => Promise<Error | null>;
-  reset: () => void;
-  setCalculation: (calc: Calculation) => void;
-  setCurrentProcess: (c: ProcessType) => void;
-  setInitialInputValue: (input: number) => void;
-  setStepMs: (ms: number) => void;
-  // 'api'
-  forward: (by?: number) => void;
-  back: (by?: number) => void;
-
-  isRunning: boolean;
-  setIsRunning: (running: boolean) => void;
-}
-
-export const useVirtualStore = create<VirtualState>()((set) => ({
   // virtual machine
   stepMs: DEFAULT_STEP_MS,
   isRunning: false,
@@ -126,45 +108,47 @@ export const useVirtualStore = create<VirtualState>()((set) => ({
     return error;
   },
   reset: () => set((state) => ({
-    // calculation: DEFAULT_CALCULATION,
     currentProcess: 'halt',
     currentValue: state.initialInputValue,
-    // initialInputValue: DEFAULT_VALUE,
     logs: [],
     position: DEFAULT_POSITION,
-    // stepMs: DEFAULT_STEP_MS,
-    // tape: DEFAULT_TAPE,
   })),
   setCalculation: (calculation) => set(() => ({ calculation })),
   setCurrentProcess: (c: ProcessType) => set(() => ({ currentProcess: c })),
-
-  // react-flow
-  // edges: DEFAULT_EDGES,
-  // nodes: DEFAULT_NODES,
-  // addEdge: (edge: Edge) => set((state) => ({ ...state, edges: [...state.edges, edge] })),
-  // addNode: (node: AppNode) => set((state) => ({ ...state, nodes: [...state.nodes, node] })),
 
   // tape
   halted: false,
   position: DEFAULT_POSITION,
   tape: DEFAULT_TAPE,
   tapeString: DEFAULT_TAPE.join(' '),
-  setTape: (tape) => set(() => ({ tape })),
-  setTapeString: (tapeString: string) => set(() => {
-    const tape = tapeString.split(' ').map(Number) as ITape;
-    return {
-      tape,
-      tapeString
-    };
-  }),
+  setTape: (tape) => set(() => ({
+    tape,
+    tapeString: getTapeString(tape),
+  })),
+  setTapeString: (tapeString: string) => set(() => ({
+    tape: getTapeFromString(tapeString),
+    tapeString
+  })),
 
-  forward: (by = 1) => set((state) => ({ position: Math.min(state.position + by, state.tape.length) })),
-  back: (by = 1) => set((state) => ({ position: Math.min(state.position - by, state.tape.length) })),
+  direction: 'forward',
+  advance: () => set((state) => ({ position: state.position + (state.direction === 'forward' ? 1 : -1) })),
+
+  // api
+  reverse: () => set((state) => ({ direction: state.direction === 'back' ? 'forward' : 'back' })),
 
   // logging
   logs: DEFAULT_LOGS,
   addLog: (log: string) => set((state) => ({ logs: [...state.logs, log] })),
 }))
+
+function getTapeString(tape: ITape): string {
+  return tape.join(' ');
+}
+
+function getTapeFromString(input: string): ITape {
+  const tape = input.split(' ').map(Number) as ITape;
+  return tape;
+}
 
 /**
  * Execute a calculation
