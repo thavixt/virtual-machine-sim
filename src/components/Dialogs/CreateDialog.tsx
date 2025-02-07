@@ -34,8 +34,8 @@ export function CreateDialog() {
         placeholderValue={PLACEHOLDER_TIP}
       />
       <div className="flex flex-col space-y-2 text-gray-400 text-sm">
+        <p>Methods available:</p>
         <div className="h-fit max-h-32 overflow-y-auto">
-          <p>Methods available:</p>
           <ul className="list-disc list-inside">
             <ListItem title="$vm_reverse()">reverse the direction the tape advances</ListItem>
           </ul>
