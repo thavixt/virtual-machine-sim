@@ -12,6 +12,8 @@ import { VirtualAction } from './state/actions.ts'
  */
 // @ts-expect-error reverse
 window.$vm_reverse = VirtualAction.reverse;
+// @ts-expect-error write
+window.$vm_write = VirtualAction.write;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

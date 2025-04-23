@@ -14,6 +14,8 @@ interface FormInputProps {
 
   min?: number;
   max?: number;
+
+  required?: boolean;
 }
 
 export function FormInput(props: FormInputProps & {
@@ -38,11 +40,14 @@ export function FormInput(props: FormInputProps): React.ReactElement {
     placeholderValue,
     type = 'text',
     value,
+    required,
   } = props;
 
   return (
-    <div className="grid grid-cols-10 grid-rows-1 gap-2">
-      <label className="col-span-2" htmlFor={name}>{label}:</label>
+    <div className="flex items-center gap-2">
+      <label className="col-span-2 min-w-32" htmlFor={name}>
+        {label}:
+      </label>
       <div className="col-span-8 flex flex-col items-center">
         {(type === 'text') ? (
           <input
@@ -55,6 +60,7 @@ export function FormInput(props: FormInputProps): React.ReactElement {
             placeholder={placeholderValue}
             type="text"
             value={value}
+            required={required}
           />
         ) : null}
         {(type === 'textarea') ? (
@@ -66,6 +72,7 @@ export function FormInput(props: FormInputProps): React.ReactElement {
             placeholder={placeholderValue}
             rows={10}
             value={value}
+            required={required}
           />
         ) : null}
         {(type === 'number') ? (

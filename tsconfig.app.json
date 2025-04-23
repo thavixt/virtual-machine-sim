@@ -21,6 +21,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "typeRoots": [
+      "src/index.d.ts",
+      "src/reset.d.ts",
+    ]
   },
   "include": ["src"],
 }

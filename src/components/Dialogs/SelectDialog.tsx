@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CALCULATIONS } from "../../logic/calculations";
 import { useVirtualStore } from "../../state";
-import { Calculation } from "../../types";
+import { Calculation } from "../..";
 import { padString } from "../../logic/utils";
 
 export function SelectDialog() {
@@ -42,7 +42,7 @@ export function SelectDialog() {
       </div>
       <div className="text-sm">
         <b>Description:</b>
-        <p>{CALCULATIONS[current].description}</p>
+        <p className="whitespace-pre-wrap">{CALCULATIONS[current].description}</p>
       </div>
       <div className="text-sm">
         <b>Tip:</b>

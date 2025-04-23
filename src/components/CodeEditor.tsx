@@ -7,6 +7,7 @@ interface CodeEditorProps {
   label?: string;
   name: string;
   defaultValue?: string;
+  required?: boolean;
 }
 
 export function CodeEditor({ label = 'Javascript code', defaultValue, name }: CodeEditorProps) {
@@ -24,6 +25,7 @@ export function CodeEditor({ label = 'Javascript code', defaultValue, name }: Co
           label={label}
           name={name}
           value={value}
+          required
         />
       </div>
       <div className="col-span-8 flex flex-col items-center">

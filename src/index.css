@@ -103,7 +103,7 @@ button {
 /* inputs */
 
 input, textarea {
-  @apply bg-gray-600 text-t-color1 px-2 py-1 ml-2 rounded-md font-mono;
+  @apply bg-gray-600 text-t-color1 px-2 py-1 rounded-md font-mono;
 }
 
 select {

@@ -1,9 +1,9 @@
 import { useVirtualStore, VirtualAction } from "../state";
 import { CreateDialog, SelectDialog } from "../components/Dialogs";
 import { useMemo } from "react";
-import { Calculation } from "../types";
 import { CreateTapeDialog } from "../components/Dialogs/CreateTapeDialog";
 import { getRandomTape } from "./utils";
+import { Calculation } from "../types";
 
 export type DialogType = 'create' | 'select' | 'createTape';
 export type Dialogs = Record<DialogType, DialogEntry>;
@@ -39,16 +39,20 @@ export function useDialogForms() {
         const calcDescription = formData.get('calcDescription') as string;
         const calcFunction = formData.get('calcFunction') as string;
         const calcTip = formData.get('calcTip') as string;
-        console.log({ calcName, calcFunction, calcTip });
+        console.debug({ calcName, calcFunction, calcTip });
         const testParams = [1, 2, 1];
-        console.log('Testing method with parameters:', testParams)
+        console.debug('Testing method with parameters:', testParams)
         const builtInMethods = getAllUtilityMethods();
-        console.log(builtInMethods);
-        const result = eval(`${builtInMethods}(${calcFunction})(${testParams.join(',')})`);
-        if (typeof result !== 'number') {
-          throw new Error(`Invalid method - result ${result} (type: ${typeof result}) is not a number type`);
+        const toEval = `
+${builtInMethods}
+        
+(${calcFunction})(${testParams.join(',')})`;
+        console.debug('Testing method', toEval);
+        const result = eval(toEval);
+        if (!['string', 'number'].includes(typeof result)) {
+          throw new Error(`Invalid method result ${result} (type: ${typeof result}) is not a number|string type`);
         }
-        console.log(`Result: ${result}, accepted`)
+        console.debug(`Result: ${result}, accepted`)
         // @todo some kinda validation ?
         addCalculation({
           description: calcDescription,
@@ -58,7 +62,7 @@ export function useDialogForms() {
         });
       }
     },
-    
+
     createTape: {
       title: 'Generate a random tape',
       form: <CreateTapeDialog />,
@@ -67,7 +71,7 @@ export function useDialogForms() {
         const tapeMin = formData.get('tapeMin') as string;
         const tapeMax = formData.get('tapeMax') as string;
         const tape = getRandomTape(+tapeLength, +tapeMin, +tapeMax);
-        console.log(tape);
+        // console.debug(tape);
         setTape(tape);
       },
     },
@@ -81,7 +85,7 @@ function getAllUtilityMethods(): string {
 
   Object.keys(VirtualAction).forEach((key) => {
     const methodDeclaration = `const $${key} = window.$vm_${key};`;
-    console.log('Method', `$${key} / global:$vm_${key}`, methodDeclaration);
+    // console.debug('Method', `$${key} / global:$vm_${key}`, methodDeclaration);
     methods.push(methodDeclaration)
   });
 

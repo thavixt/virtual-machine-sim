@@ -20,6 +20,7 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>((props, forward
 
   const onSubmitDialog: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setError(null);
     const formElement = document.forms.namedItem(DIALOG_FORM_NAME)!;
     const formData = new FormData(formElement);
     try {
@@ -40,7 +41,7 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>((props, forward
   };
 
   return createPortal(
-    <dialog ref={ref} className="m-auto p-6 rounded-lg border-2 border-t-color5 shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-md w-fit max-w-[900px]">
+    <dialog ref={ref} className="m-auto p-6 rounded-lg border-2 border-t-color5 shadow-2xl backdrop:bg-black/25 backdrop:backdrop-blur-xs w-fit max-w-[900px]">
       <form id={DIALOG_FORM_NAME} method="dialog" onSubmit={onSubmitDialog}>
         <div className="flex flex-col space-y-2">
           <p className="text-xl text-center">{title}</p>

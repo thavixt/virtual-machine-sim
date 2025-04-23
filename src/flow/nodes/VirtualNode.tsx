@@ -40,19 +40,45 @@ export function VirtualNode({ data: { type } }: NodeProps<VirtualNode>) {
   return (
     <div className={`react-flow__node-default rf-node rf-node_${type} rf-node_${status}`}>
       <p>{LABELS[type]}</p>
-      <small>{description}</small>
+      <small className="whitespace-pre-wrap">{description}</small>
       <p>
         <b>{type === 'input' ? tape[position] ?? 0 : null}</b>
       </p>
-      <Handle
-        type={type === 'input' ? 'source' : 'target'}
-        position={Position.Top}
-      />
-      {(type !== 'halt') ? (
-        <Handle
-          type={type === 'input' ? 'target' : 'source'}
-          position={Position.Bottom}
-        />
+      {type === 'input' ? (
+        <>
+          <Handle
+            type={'target'}
+            position={Position.Bottom}
+          />
+          <Handle
+            type={'source'}
+            position={Position.Right}
+          />
+        </>
+      ) : null}
+      {type === 'calc' ? (
+        <>
+          <Handle
+            type={'target'}
+            position={Position.Left}
+          />
+          <Handle
+            type={'source'}
+            position={Position.Left}
+          />
+        </>
+      ) : null}
+      {type === 'halt' ? (
+        <>
+          <Handle
+            type={'target'}
+            position={Position.Top}
+          />
+          <Handle
+            type={'source'}
+            position={Position.Top}
+          />
+        </>
       ) : null}
     </div>
   );

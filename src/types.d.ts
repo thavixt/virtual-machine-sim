@@ -1,9 +1,21 @@
-export type Calculation = 'sum' | 'sumStep' | 'sub' | 'odd' | 'even' | string;
+declare global {
+  interface Window {
+    $vm_reverse: () => void;
+    $vm_write: (value: number) => void;
+  }
+}
+
+export type Calculation = 'turing' | 'sum' | 'sumStep' | 'sub' | 'odd' | 'even' | string;
 export interface CalculationFn {
   name: string;
   description: string;
   tip?: string;
-  fn: ((step: number, currentValue: number, ...inputs: number[]) => number) | string;
+  fn: ((
+    step: number,
+    currentValue: number | string,
+    input: number,
+    direction: Direction,
+  ) => number | string) | string;
 }
 
 export type ProcessType = 'input' | 'calc' | 'halt';

@@ -17,6 +17,7 @@ export interface IStore {
   // addNode: (node: AppNode) => void;
 
   // tape
+  step: number;
   position: number;
   tape: ITape;
   tapeString: string;

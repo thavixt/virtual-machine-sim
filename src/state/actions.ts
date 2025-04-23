@@ -19,15 +19,21 @@ export const VirtualAction = {
     getState().setIsRunning(false);
     logState('Stopped Virtual machine...');
   },
-  // 'api' methods
-  reverse: (by = 1) => {
-    console.log(`Advance tape back by ${by}`);
+  reverse: () => {
+    console.log(`Reverse the tape direction (was ${getState().direction})`);
     getState().reverse();
   },
+  write: (n: number) => {
+    console.log(`Write ${n} to the tape`);
+    getState().write(n);
+  }
 }
 
-export const TurningState = {
+export const VirtualMachineState = {
   isRunning: () => {
     return getState().isRunning;
+  },
+  getDirection: () => {
+    return getState().direction;
   },
 }

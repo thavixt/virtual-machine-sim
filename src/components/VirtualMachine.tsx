@@ -28,7 +28,7 @@ export function VirtualMachine() {
       console.warn(`Halted, reason: ${errorMessage.reason}`);
       return;
     }
-    
+
     if (!TurningState.isRunning()) {
       return;
     }
@@ -41,26 +41,30 @@ export function VirtualMachine() {
   }
 
   return (
-    <div className="containerBox flex px-2 space-x-2 items-center">
-      <button
-        type="button"
-        className="start"
-        disabled={!!running}
-        onClick={start}
-      >
-        Start
-      </button>
-      <button
-        type="button"
-        className="stop"
-        disabled={!running}
-        onClick={VirtualAction.stop}
-      >
-        Stop
-      </button>
+    <div className="containerBox flex flex-col md:flex-row px-2 gap-2 items-center">
+      <div className="flex gap-2 items-center">
+        <button
+          type="button"
+          className="start"
+          disabled={!!running}
+          onClick={start}
+          title="Start machine"
+          >
+          &#11122;
+        </button>
+        <button
+          type="button"
+          className="stop"
+          disabled={!running}
+          onClick={VirtualAction.stop}
+          title="Stop machine"
+          >
+          &#10539;
+        </button>
+        <Value />
+        <StepCounter />
+      </div>
       <Tape />
-      <Value />
-      <StepCounter />
     </div>
   )
 }
@@ -69,7 +73,7 @@ function Value() {
   const currentValue = useVirtualStore(state => state.currentValue);
 
   return (
-    <div className="bg-gray-300 rounded-md px-2 text-center text-sm">
+    <div className="bg-gray-300 rounded-md flex place-items-center px-2 text-center text-sm">
       Value: {currentValue}
     </div>
   )

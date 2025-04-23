@@ -25,14 +25,14 @@ function App() {
   }
 
   return (
-    <div className="h-full w-full grid grid-cols-1 grid-rows-10 gap-2 animate-appear">
+    <div className="min-w-[300px] h-full w-full flex flex-col gap-2 animate-appear m-auto max-w-4xl pt-8 px-2">
       <div className="w-full flex flex-col space-y-1 row-span-6">
         <Header />
         <Dashboard />
         <TapeInput />
         <VirtualMachine />
       </div>
-      <div className="px-2 row-span-4 flex">
+      <div className="px-2 min-h-[300px] flex">
         <Container>
           {(width, height) => <Flow key={`${width}x${height}`} />}
         </Container>

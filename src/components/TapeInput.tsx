@@ -15,20 +15,34 @@ export function TapeInput() {
   }
 
   return (
-    <div className="containerBox grid grid-rows-1 grid-cols-12 gap-2">
-      <div className="flex space-x-2 col-span-2 items-center">
-        <label htmlFor="inputValue">Input:</label>
-        <input
-          className="w-full"
-          disabled={running}
-          id="inputValue"
-          name="inputValue"
-          onChange={(e) => setInitialInputValue(Math.max(0, +e.target.value))}
-          type="number"
-          value={input}
-        />
+    <div className="containerBox flex flex-col md:flex-row gap-2">
+      <div className="flex gap-2">
+        <div className="flex space-x-1 items-center" title="Time it takes for the tape to advance (in ms, default 500 = half a second)">
+          <label htmlFor="inputSpeed">Speed (ms):</label>
+          <input
+            className="w-24"
+            disabled={running}
+            id="inputSpeed"
+            name="inputSpeed"
+            onChange={e => setStepMs(+e.target.value)}
+            type="number"
+            value={stepMs}
+          />
+        </div>
+        <div className="flex space-x-1 items-center" title="Initial value">
+          <label htmlFor="inputValue">Input:</label>
+          <input
+            className="w-16"
+            disabled={running}
+            id="inputValue"
+            name="inputValue"
+            onChange={(e) => setInitialInputValue(Math.max(0, +e.target.value))}
+            type="number"
+            value={input}
+          />
+        </div>
       </div>
-      <div className="flex space-x-2 col-span-8 items-center" title="Input a list of numbers separated by spaces, like: '0 1123 0 -1 0 0 4 5'">
+      <div className="flex w-full space-x-1 items-center" title="Input a list of numbers separated by spaces, like: '0 1123 0 -1 0 0 4 5'">
         <label htmlFor="inputTape">Tape:</label>
         <input
           className="w-full"
@@ -39,18 +53,6 @@ export function TapeInput() {
           pattern="[0-9\s]+"
           type="text"
           value={tapeString}
-        />
-      </div>
-      <div className="flex space-x-2 col-span-2 items-center" title="Time it takes for the tape to advance (in ms, default 500 = half a second)">
-        <label htmlFor="inputSpeed">Speed:</label>
-        <input
-          className="w-full"
-          disabled={running}
-          id="inputSpeed"
-          name="inputSpeed"
-          onChange={e => setStepMs(+e.target.value)}
-          type="number"
-          value={stepMs}
         />
       </div>
     </div>

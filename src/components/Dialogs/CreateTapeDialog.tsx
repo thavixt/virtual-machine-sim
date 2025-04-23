@@ -22,7 +22,7 @@ export function CreateTapeDialog() {
       <FormInput
         label="Maximum value"
         name="tapeMax"
-        defaultValue={999}
+        defaultValue={1}
         type="number"
         min={-10e10}
         max={10e10}

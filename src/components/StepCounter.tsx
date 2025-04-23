@@ -13,7 +13,7 @@ export function StepCounter() {
       { 'bg-red-500 text-gray-100': halted },
     )}>
       {halted ? (
-        <span>Halted at step: #{position + 1}</span>
+        <span>Halted: #{position + 1}</span>
       ) : (
         <span>Step: #{position + 1}</span>
       )}

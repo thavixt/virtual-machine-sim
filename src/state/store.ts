@@ -1,23 +1,24 @@
 import { create } from 'zustand'
 import { CALCULATIONS } from '../logic/calculations';
-import { Calculation, CalculationFn, ErrorMessage, ITape, ProcessType } from '../types';
-import { getRandomInt, getRandomKey, getRandomTape, sleep } from '../logic/utils';
+import { getRandomInt, getRandomTape, sleep } from '../logic/utils';
 import { IStore } from './IStore';
+import { Calculation, CalculationFn, Direction, ErrorMessage, ITape, ProcessType } from '../types';
 
 const DEFAULT_CALCULATION: Calculation = (() => {
-  const value = getRandomKey(CALCULATIONS, 'add');
-  console.debug('DEFAULT_CALCULATION:', value);
-  return value;
+  // const value = getRandomKey(CALCULATIONS, 'add');
+  // console.debug('DEFAULT_CALCULATION:', value);
+  // return value;
+  return 'turing';
 })();
 const DEFAULT_TAPE: ITape = (() => {
-  const value = getRandomTape(getRandomInt(0, 100), 0, 100);
-  console.debug('DEFAULT_TAPE:', value);
+  const value = getRandomTape(100, 0, 1);
+  // console.debug('DEFAULT_TAPE:', value);
   return value;
 })();
 
 const DEFAULT_LOGS: string[] = [];
-const DEFAULT_POSITION = -1;
-const DEFAULT_STEP_MS = 200;
+const DEFAULT_POSITION = 25;
+const DEFAULT_STEP_MS = 250;
 const DEFAULT_VALUE = 1;
 
 export const useVirtualStore = create<IStore>()((set, get) => ({
@@ -36,6 +37,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
   initPhase: 'ready',
 
   // virtual machine
+  step: 0,
   stepMs: DEFAULT_STEP_MS,
   isRunning: false,
   setStepMs: (stepMs: number) => set(() => ({ stepMs })),
@@ -83,7 +85,14 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
       let result = currentValue;
 
       try {
-        result = executeCalculation(CALCULATIONS[state.calculation].fn, currentPosition, currentValue, nextValue);
+        // console.debug(currentPosition, currentValue, nextValue);
+        result = executeCalculation(
+          CALCULATIONS[state.calculation].fn,
+          state.step,
+          currentValue,
+          nextValue,
+          state.direction,
+        );
       } catch (e) {
         const calcError = e as Error;
         error = calcError;
@@ -92,6 +101,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
         log = `${logPrefix} ${logFn} -> ${errorMessage.result} (Halted, reason: ${errorMessage.reason})`;
 
         return {
+          step: state.step + 1,
           currentProcess: 'halt',
           currentValue: errorMessage.result,
           isRunning: false,
@@ -101,6 +111,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
 
       log = `${logPrefix} ${logFn} -> ${result}`
       return {
+        step: state.step + 1,
         currentValue: result,
         logs: [...state.logs, log],
       };
@@ -112,6 +123,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
     currentValue: state.initialInputValue,
     logs: [],
     position: DEFAULT_POSITION,
+    step: 0,
   })),
   setCalculation: (calculation) => set(() => ({ calculation })),
   setCurrentProcess: (c: ProcessType) => set(() => ({ currentProcess: c })),
@@ -131,15 +143,21 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
   })),
 
   direction: 'forward',
-  advance: () => set((state) => ({ position: state.position + (state.direction === 'forward' ? 1 : -1) })),
 
   // api
+  advance: () => set((state) => ({ position: state.position + (state.direction === 'forward' ? 1 : -1) })),
   reverse: () => set((state) => ({ direction: state.direction === 'back' ? 'forward' : 'back' })),
+  write: (n: number) => set((state) => {
+    const position = state.position;
+    const updatedTape = [...state.tape];
+    updatedTape[position] = n;
+    return { tape: updatedTape, tapeString: getTapeString(updatedTape) };
+  }),
 
   // logging
   logs: DEFAULT_LOGS,
   addLog: (log: string) => set((state) => ({ logs: [...state.logs, log] })),
-}))
+}));
 
 function getTapeString(tape: ITape): string {
   return tape.join(' ');
@@ -160,11 +178,12 @@ function executeCalculation(
   currentPosition: number,
   currentValue: number,
   nextValue: number,
-): number {
+  direction: Direction,
+) {
   if (typeof calculation === 'string') {
     const params = [currentPosition, currentValue, nextValue];
     return eval(`(${calculation})(${params.join(',')})`)
   }
 
-  return calculation(currentPosition, currentValue, nextValue)
+  return calculation(currentPosition, currentValue, nextValue, direction)
 }

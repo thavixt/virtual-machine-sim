@@ -29,8 +29,12 @@ export function TapeValue({ current, value }: TapeValueProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current && current) {
-      ref.current.scrollIntoView({ behavior: 'auto' });
+    if (current) {
+      ref.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
     }
   }, [current]);
 

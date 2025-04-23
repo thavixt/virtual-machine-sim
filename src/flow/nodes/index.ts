@@ -14,7 +14,7 @@ export const DEFAULT_NODES: AppNode[] = [
   {
     id: 'calc',
     type: 'virtualNode',
-    position: { x: 200, y: 0 },
+    position: { x: 300, y: 0 },
     data: { type: 'calc' },
   },
   {

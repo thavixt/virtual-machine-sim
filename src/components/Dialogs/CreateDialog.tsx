@@ -3,10 +3,10 @@ import { CodeEditor } from "../CodeEditor";
 import { FormInput } from "../FormInput";
 import { ListItem } from "../ListItem";
 
-const PLACEHOLDER_NAME = `My custom function`;
-const PLACEHOLDER_DESCRIPTION = `This method does x and y, and halts when z occurs`;
-const PLACEHOLDER_FUNCTION_CODE = CALCULATIONS.even.fn.toString();
-const PLACEHOLDER_TIP = `Optional: Describe a useful thing you can do with this`;
+const PLACEHOLDER_NAME = `My virtual machine function`;
+const PLACEHOLDER_DESCRIPTION = `This method does x or y, but halts when z occurs`;
+const PLACEHOLDER_FUNCTION_CODE = CALCULATIONS.turing.fn.toString();
+const PLACEHOLDER_TIP = `Describe a useful thing you can do with this, or what kind of tape to provide for it`;
 
 export function CreateDialog() {
   return (
@@ -16,17 +16,20 @@ export function CreateDialog() {
         label="Function name"
         name="calcName"
         placeholderValue={PLACEHOLDER_NAME}
+        required
       />
       <FormInput
         type="text"
         label="Description"
         name="calcDescription"
         placeholderValue={PLACEHOLDER_DESCRIPTION}
+        required
       />
       <CodeEditor
         defaultValue={PLACEHOLDER_FUNCTION_CODE}
         name="calcFunction"
-      />
+        required
+        />
       <FormInput
         type="text"
         label="Tip"
@@ -37,15 +40,17 @@ export function CreateDialog() {
         <p>Methods available:</p>
         <div className="h-fit max-h-32 overflow-y-auto">
           <ul className="list-disc list-inside">
-            <ListItem title="$vm_reverse()">reverse the direction the tape advances</ListItem>
+            <ListItem title="$vm_reverse()">
+              reverse the direction the tape advances
+            </ListItem>
+            <ListItem title="$vm_write(value: number)">
+              write a number to the tape at the current position
+            </ListItem>
           </ul>
         </div>
         <hr />
-        <div>
-          <p>The default code example is for the <code>even</code> method.</p>
-          <p>It receives the index of the current <code>step</code> (unused), the current <code>value</code> and the next <code>input</code> from the tape, and returns their sum.
-            If the result is even (divisible by 2), instead of returning it, the function throws an error, describing why the machine is halting.</p>
-          <p>When throwing an <b>error</b>, do it as a <code>{'new Error({ message: "Something went wrong", result: 123 })'}</code>. The <code>result</code> is the would-be next value - which presumably is <b>halting</b> the machine</p>
+        <div className="text-xs">
+          <p>When throwing an <b>error</b>, do it as a <code>{'new Error({ message: "Something went wrong", result: 123 })'}</code>. The <code>result</code> is the would-be next value - which presumably is causing the machine to <b>halt</b></p>
         </div>
       </div>
     </div >
