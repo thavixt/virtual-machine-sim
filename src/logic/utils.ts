@@ -1,4 +1,4 @@
-import { ITape } from "..";
+import { ITape } from "../types";
 
 export async function sleep(ms = 200) {
   return new Promise(res => setTimeout(res, ms));

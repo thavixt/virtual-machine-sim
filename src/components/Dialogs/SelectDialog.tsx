@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { CALCULATIONS } from "../../logic/calculations";
 import { useVirtualStore } from "../../state";
-import { Calculation } from "../..";
 import { padString } from "../../logic/utils";
+import { Calculation } from "../../types";
 
 export function SelectDialog() {
   const running = useVirtualStore(state => state.isRunning);

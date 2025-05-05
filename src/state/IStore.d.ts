@@ -44,6 +44,7 @@ export interface IStore {
   advance: () => void;
   // 'api'
   reverse: () => void;
+  write: (vlaue: number) => void;
 
   isRunning: boolean;
   setIsRunning: (running: boolean) => void;

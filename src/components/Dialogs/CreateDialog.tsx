@@ -41,10 +41,10 @@ export function CreateDialog() {
         <div className="h-fit max-h-32 overflow-y-auto">
           <ul className="list-disc list-inside">
             <ListItem title="$vm_reverse()">
-              reverse the direction the tape advances
+              reverse the direction of the tape
             </ListItem>
             <ListItem title="$vm_write(value: number)">
-              write a number to the tape at the current position
+              write a value to the tape at the current position
             </ListItem>
           </ul>
         </div>
