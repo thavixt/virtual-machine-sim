@@ -32,7 +32,7 @@ function App() {
         <TapeInput />
         <VirtualMachine />
       </div>
-      <div className="px-2 min-h-[300px] flex">
+      <div className="px-2 min-h-[400px] flex">
         <Container>
           {(width, height) => <Flow key={`${width}x${height}`} />}
         </Container>

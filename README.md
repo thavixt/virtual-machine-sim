@@ -1,6 +1,8 @@
 # Virtual machine sim
 
-Inspired by: https://youtu.be/HeQX2HjkcNo?si=AChtSkHAxsGK9RO1&t=1416
+Inspired by:
+- [Youtube: Veritasium - Math's Fundamental Flaw](https://youtu.be/HeQX2HjkcNo?si=AChtSkHAxsGK9RO1&t=1416)
+- [Youtube: Quanta Magazine - Amateurs Solve a Famous Computer Science Problem On Discord](https://www.youtube.com/watch?v=rmx3FBPzDuk)
 
 # Notes
 

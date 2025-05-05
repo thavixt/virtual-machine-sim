@@ -20,7 +20,7 @@ export const DEFAULT_NODES: AppNode[] = [
   {
     id: 'halt',
     type: 'virtualNode',
-    position: { x: 100, y: 150 },
+    position: { x: 100, y: 200 },
     data: { type: 'halt' },
   },
 ];

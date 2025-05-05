@@ -70,7 +70,7 @@ export function DashboardButtons() {
               onClick={() => openDialog('createTape')}
               type="button"
             >
-              Create a random tape
+              Generate a random tape
             </button>
           </div>
         </div>

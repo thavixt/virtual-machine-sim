@@ -39,7 +39,7 @@ export function VirtualNode({ data: { type } }: NodeProps<VirtualNode>) {
 
   return (
     <div className={`react-flow__node-default rf-node rf-node_${type} rf-node_${status}`}>
-      <p>{LABELS[type]}</p>
+      <p className="pb-2">{LABELS[type]}</p>
       <small className="whitespace-pre-wrap">{description}</small>
       <p>
         <b>{type === 'input' ? tape[position] ?? 0 : null}</b>

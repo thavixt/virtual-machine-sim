@@ -17,7 +17,7 @@ export function getRandomInt(min = 0, max = 1) {
  * Minimum 10 tape length - always
  */
 export function getRandomTape(length = 100, min?: number, max?: number): ITape {
-  return Array(Math.max(length, 10)).fill(0).map(() => getRandomInt(min, max));
+  return Array(Math.max(length, 5)).fill(0).map(() => getRandomInt(min, max));
 }
 
 /**

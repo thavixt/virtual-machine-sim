@@ -5,10 +5,11 @@ import { IStore } from './IStore';
 import { Calculation, CalculationFn, Direction, ErrorMessage, ITape, ProcessType } from '../types';
 
 const DEFAULT_CALCULATION: Calculation = (() => {
+  return 'turing';
+  // random initial calculation set on load
   // const value = getRandomKey(CALCULATIONS, 'add');
   // console.debug('DEFAULT_CALCULATION:', value);
   // return value;
-  return 'turing';
 })();
 const DEFAULT_TAPE: ITape = (() => {
   const value = getRandomTape(100, 0, 1);
@@ -17,7 +18,8 @@ const DEFAULT_TAPE: ITape = (() => {
 })();
 
 const DEFAULT_LOGS: string[] = [];
-const DEFAULT_POSITION = 25;
+// const DEFAULT_POSITION = Math.floor(DEFAULT_TAPE.length / 3);
+const DEFAULT_POSITION = -1;
 const DEFAULT_STEP_MS = 250;
 const DEFAULT_VALUE = 1;
 
@@ -29,14 +31,17 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
     }
     set(() => ({initPhase: 'pending'}))
     const ms = getRandomInt(250, 500);
-    console.debug(`Init in ${ms}ms`)
+    // @TODO: do something interesting
+    // like read past/stored data
     await sleep(ms);
+    // console.debug(`Init in ${ms}ms`);
     set(() => ({initPhase: 'ready'}))
   },
-  // for now, skip the initialization stuff, @todo maybe do something interesting later
+  // @TODO: do something interesting
+  // for now, skip the initialization stuff
+  // probably read stored calculations, localstorage/indexedDB
   initPhase: 'ready',
 
-  // virtual machine
   step: 0,
   stepMs: DEFAULT_STEP_MS,
   isRunning: false,
@@ -64,31 +69,27 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
   calculate: async () => {
     let error: Error | null = null;
     set((state) => {
-      if (state.currentProcess !== 'calc') {
-        return {};
-      }
-
-      if (state.position >= state.tape.length) {
-        error = new Error('Tape finished');
-        return { currentProcess: 'halt', isRunning: false };
-      }
-
-      const currentPosition = state.position;
+      const currentStep = state.step;
       const currentValue = state.currentValue;
       const nextValue = state.tape[state.position];
-
       const fn = state.calculation;
-      // @todo
       const logPrefix = '';
-      const logFn = `${fn}(${currentPosition}, ${currentValue}, ${nextValue})`;
-      let log = ``;
+      const logFn = `${fn}(${currentStep}, ${currentValue}, ${nextValue})`;
       let result = currentValue;
 
       try {
-        // console.debug(currentPosition, currentValue, nextValue);
+        if (state.currentProcess !== 'calc') {
+          return {};
+        }
+        if (state.position >= state.tape.length) {
+          throw new Error(JSON.stringify(({
+            reason: 'Tape finished',
+            result,
+          }) as ErrorMessage));
+        }
         result = executeCalculation(
           CALCULATIONS[state.calculation].fn,
-          state.step,
+          currentStep,
           currentValue,
           nextValue,
           state.direction,
@@ -97,9 +98,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
         const calcError = e as Error;
         error = calcError;
         const errorMessage = JSON.parse(calcError.message) as ErrorMessage;
-
-        log = `${logPrefix} ${logFn} -> ${errorMessage.result} (Halted, reason: ${errorMessage.reason})`;
-
+        const log = `${logPrefix} ${logFn} -> ${errorMessage.result} (Halted, reason: ${errorMessage.reason})`;
         return {
           step: state.step + 1,
           currentProcess: 'halt',
@@ -109,7 +108,7 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
         }
       }
 
-      log = `${logPrefix} ${logFn} -> ${result}`
+      const log = `${logPrefix} ${logFn} -> ${result}`
       return {
         step: state.step + 1,
         currentValue: result,
@@ -143,9 +142,18 @@ export const useVirtualStore = create<IStore>()((set, get) => ({
   })),
 
   direction: 'forward',
-
   // api
-  advance: () => set((state) => ({ position: state.position + (state.direction === 'forward' ? 1 : -1) })),
+  advance: () => set((state) => {
+    if (state.direction === 'forward' && state.position >= state.tape.length - 1) {
+      console.warn('Tape looped from the end');
+      return { position: 0 };
+    }
+    if (state.direction === 'back' && state.position === 0) {
+      console.warn('Tape looped from the start');
+      return { position: state.tape.length - 1 };
+    }
+    return { position: state.position + (state.direction === 'forward' ? 1 : -1) };
+  }),
   reverse: () => set((state) => ({ direction: state.direction === 'back' ? 'forward' : 'back' })),
   write: (n: number) => set((state) => {
     const position = state.position;

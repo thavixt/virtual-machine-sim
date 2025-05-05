@@ -1,9 +1,18 @@
 import { CalculationFn, ErrorMessage, Calculation } from "../types";
 
 const turingMachine: CalculationFn['fn'] = (step, instructions, input, tapeDirection) => {
+  // Verify the input is valid
+  if (![0, 1].includes(+input)) {
+    const errorMessage: ErrorMessage = {
+      reason: `HALT - input invalid, or tape ran out`,
+      result: -1,
+    };
+    const msg = JSON.stringify(errorMessage as ErrorMessage)
+    throw new Error(msg);
+  }
+
   // provide a default instruction for the first step, since it'll be an unrelated number
-  const lastInstructions = step === 0 ? 'BBB' : instructions;
-  console.log(step);
+  const lastInstructions = step === 0 ? 'AAA' : instructions;
 
   // verify the received instruction return from the previous step
   let currentRule = lastInstructions.toString()[2].toString() as 'A' | 'B';
@@ -25,7 +34,7 @@ const turingMachine: CalculationFn['fn'] = (step, instructions, input, tapeDirec
   // get the next instruction based on the current input
   const ruleTable = {
     A: { 0: '1RB', 1: 'HALT' },
-    B: { 0: '1RA', 1: '0RB' },
+    B: { 0: '1LA', 1: '0RB' },
   };
   // based on the rule returned by the previous step
   const currentRuleColumn = ruleTable[currentRule];
@@ -35,7 +44,7 @@ const turingMachine: CalculationFn['fn'] = (step, instructions, input, tapeDirec
   // verify the next instruction
   if (nextInstruction === 'HALT') {
     const errorMessage: ErrorMessage = {
-      reason: `Turing machine received a HALT instruction from the last step`,
+      reason: `Turing machine received the HALT instruction`,
       result: -1,
     };
     const msg = JSON.stringify(errorMessage as ErrorMessage)
@@ -134,12 +143,12 @@ export const CALCULATIONS: Record<Calculation, CalculationFn> = {
 
 \t\t\t\t\tRead 0\t\tRead 1
 Rule A:\t\t\t1RB\t\tHALT
-Rule B:\t\t\t1RA\t\t0RB
+Rule B:\t\t\t1LA\t\t0RB
 
-Instruction meaning:
-[1]: value to write to tape
-[2]: direction to advance
-[3]: rule for next step
+Instructions consist of:
+[1]: a value to write to tape
+[2]: the direction to advance next
+[3]: a rule to follow next
 
 Starting rule is Rule B.`,
     tip: 'Provide a tape of 1s as 0s only',
